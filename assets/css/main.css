@@ -2512,7 +2512,7 @@
 		position: fixed;
 		text-align: right;
 		top: 0;
-		width: 30em;
+		width: 25em;
 	}
 
 		#header > * {
@@ -2590,10 +2590,10 @@
 /* Main */
 
 	#main {
-		margin-left: 35%;
-		max-width: 54em;
+		margin-left: 25em;
+		max-width: 55em;
 		padding: 8em 4em 4em 4em;
-		width: calc(100% - 35%);
+		width: calc(100% - 25em);
 	}
 
 		#main > section {
