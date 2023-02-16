@@ -2512,7 +2512,7 @@
 		position: fixed;
 		text-align: right;
 		top: 0;
-		width: 25em;
+		width: 28%;
 	}
 
 		#header > * {
@@ -2536,13 +2536,13 @@
 		}
 
 		#header h2, #header h3, #header h4, #header h5, #header h6 {
-			color: #ffffff;
+			color: rgba(255, 255, 255, 0.7);
 		}
 
 		#header h1 {
 			color: rgba(255, 255, 255, 0.7);
 			font-size: 1.35em;
-			line-height: 1.75em;
+			line-height: 1.55em;
 			margin: 0;
 		}
 
@@ -2590,10 +2590,10 @@
 /* Main */
 
 	#main {
-		margin-left: 25em;
+		margin-left: 28%;
 		max-width: 55em;
 		padding: 8em 4em 4em 4em;
-		width: calc(100% - 25em);
+		width: calc(100% - 28%);
 	}
 
 		#main > section {
