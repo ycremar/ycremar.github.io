@@ -2482,7 +2482,7 @@
 
 /* Header */
 
-	#header {
+/*	#header {
 		display: -moz-flex;
 		display: -webkit-flex;
 		display: -ms-flex;
@@ -2500,11 +2500,6 @@
 		-ms-justify-content: space-between;
 		justify-content: space-between;
 		background-color: #1f1815;
-		background-attachment: scroll,								fixed;
-		background-image: url("images/overlay.png"), url("../../images/bg.jpg");
-		background-position: top left,							center;
-		background-repeat: repeat,								no-repeat;
-		background-size: auto,								auto 120%;
 		color: rgba(255, 255, 255, 0.5);
 		height: 100%;
 		left: 0;
@@ -2513,7 +2508,49 @@
 		text-align: right;
 		top: 0;
 		width: 28%;
+		z-index: -1;
+	}*/
+
+	#header {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: flex-end;
+	  justify-content: space-between;
+	  background-color: #1f1815;
+	  height: 100%;
+	  left: 0;
+	  padding: 8em 4em;
+	  position: fixed;
+	  text-align: right;
+	  top: 0;
+	  width: 28%;
 	}
+
+		.bg-image {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		}
+
+		#noisy-img,
+		#denoised-img {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		    z-index: -1;
+		}
+
+		#denoised-img {
+		    clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 0);
+		    opacity: 0;
+		    transition: opacity 1s ease-in-out;
+		}
+
 
 		#header > * {
 			-moz-flex-shrink: 0;
