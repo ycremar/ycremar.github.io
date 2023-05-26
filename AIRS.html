@@ -14,30 +14,34 @@
     <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.14.4"></script>
   </head>
 <body>
-  <div class="markmap">
-    <pre id="content-pre-1"></pre>
-    <pre id="content-pre-2"></pre>
-  </div>
-
+  <div class="markmap" id="markmapContainer"></div>
+  
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Fetch content from "content-1.txt"
-      fetch('markmap_style.md')
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const createPreElement = (id, content) => {
+        const pre = document.createElement('pre');
+        pre.id = id;
+        pre.textContent = content;
+        return pre;
+      };
+
+      const markmapContainer = document.getElementById('markmapContainer');
+
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md?token=GHSAT0AAAAAAB7GUGRSAKABU2KFKOT6S6IQZDQLJTQ')
         .then(response => response.text())
         .then(content => {
-          const preTag = document.getElementById('content-pre-1');
-          preTag.textContent = content;
+          const pre = createPreElement('content-pre-1', content);
+          markmapContainer.appendChild(pre);
         })
         .catch(error => {
           console.error('Error loading content-1:', error);
         });
 
-      // Fetch content from "content-2.txt"
-      fetch('README.md')
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md?token=GHSAT0AAAAAAB7GUGRSCJIJYJJX7CSXHCFCZDQLJHQ')
         .then(response => response.text())
         .then(content => {
-          const preTag = document.getElementById('content-pre-2');
-          preTag.textContent = content;
+          const pre = createPreElement('content-pre-2', content);
+          markmapContainer.appendChild(pre);
         })
         .catch(error => {
           console.error('Error loading content-2:', error);
