@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markmap</title>
+    <style>
+      svg.markmap {
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.14.4"></script>
+  </head>
+<body>
+  <div class="markmap">
+    <pre id="content-pre-1"></pre>
+    <pre id="content-pre-2"></pre>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Fetch content from "content-1.txt"
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md')
+        .then(response => response.text())
+        .then(content => {
+          const preTag = document.getElementById('content-pre-1');
+          preTag.textContent = content;
+        })
+        .catch(error => {
+          console.error('Error loading content-1:', error);
+        });
+
+      // Fetch content from "content-2.txt"
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md')
+        .then(response => response.text())
+        .then(content => {
+          const preTag = document.getElementById('content-pre-2');
+          preTag.textContent = content;
+        })
+        .catch(error => {
+          console.error('Error loading content-2:', error);
+        });
+    });
+  </script>
+</body>
+</html>
