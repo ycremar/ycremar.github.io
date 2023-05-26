@@ -26,9 +26,9 @@
     const markmapContainer = document.getElementById('markmapContainer');
 
     Promise.all([
-      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md?token=GHSAT0AAAAAAB7GUGRTUIS6OYF7BMNPJ4JOZDQMCWA')
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md')
         .then(response => response.text()),
-      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md?token=GHSAT0AAAAAAB7GUGRSPLGIRLA7KE5ETJXGZDQMCHA')
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md')
         .then(response => response.text()),
     ]).then(([content1, content2]) => {
       const pre1 = createPreElement('content-pre-1', content1);
