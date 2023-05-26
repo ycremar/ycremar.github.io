@@ -11,41 +11,37 @@
         height: 100vh;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.14.4"></script>
   </head>
 <body>
   <div class="markmap" id="markmapContainer"></div>
   
   <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const createPreElement = (id, content) => {
-        const pre = document.createElement('pre');
-        pre.id = id;
-        pre.textContent = content;
-        return pre;
-      };
+    const createPreElement = (id, content) => {
+      const pre = document.createElement('pre');
+      pre.id = id;
+      pre.textContent = content;
+      return pre;
+    };
 
-      const markmapContainer = document.getElementById('markmapContainer');
+    const markmapContainer = document.getElementById('markmapContainer');
 
-      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md?token=GHSAT0AAAAAAB7GUGRSAKABU2KFKOT6S6IQZDQLJTQ')
-        .then(response => response.text())
-        .then(content => {
-          const pre = createPreElement('content-pre-1', content);
-          markmapContainer.appendChild(pre);
-        })
-        .catch(error => {
-          console.error('Error loading content-1:', error);
-        });
+    Promise.all([
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md?token=GHSAT0AAAAAAB7GUGRTUIS6OYF7BMNPJ4JOZDQMCWA')
+        .then(response => response.text()),
+      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md?token=GHSAT0AAAAAAB7GUGRSPLGIRLA7KE5ETJXGZDQMCHA')
+        .then(response => response.text()),
+    ]).then(([content1, content2]) => {
+      const pre1 = createPreElement('content-pre-1', content1);
+      const pre2 = createPreElement('content-pre-2', content2);
+      markmapContainer.appendChild(pre1);
+      markmapContainer.appendChild(pre2);
 
-      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md?token=GHSAT0AAAAAAB7GUGRSCJIJYJJX7CSXHCFCZDQLJHQ')
-        .then(response => response.text())
-        .then(content => {
-          const pre = createPreElement('content-pre-2', content);
-          markmapContainer.appendChild(pre);
-        })
-        .catch(error => {
-          console.error('Error loading content-2:', error);
-        });
+      // Now that the content has been fetched and added to the page, dynamically load the markmap library
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/markmap-autoloader@0.14.4';
+      document.body.appendChild(script);
+    }).catch(error => {
+      console.error('Error loading content:', error);
     });
   </script>
 </body>
