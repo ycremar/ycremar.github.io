@@ -22,7 +22,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Fetch content from "content-1.txt"
-      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/markmap_style.md')
+      fetch('markmap_style.md')
         .then(response => response.text())
         .then(content => {
           const preTag = document.getElementById('content-pre-1');
@@ -33,7 +33,7 @@
         });
 
       // Fetch content from "content-2.txt"
-      fetch('https://raw.githubusercontent.com/ycremar/AIRS-mindmap/main/README.md')
+      fetch('README.md')
         .then(response => response.text())
         .then(content => {
           const preTag = document.getElementById('content-pre-2');
