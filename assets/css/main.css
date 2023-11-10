@@ -2091,7 +2091,7 @@
 			}
 
 			.image.avatar img {
-				border-radius: 50%;
+				border-radius: 5%;
 				width: 100%;
 			}
 
@@ -2543,7 +2543,7 @@
 
 		#header .image.avatar {
 			margin: 0 0 1em 0;
-			width: 6.25em;
+			width: 11.25em;
 		}
 
 		.bg-image {
