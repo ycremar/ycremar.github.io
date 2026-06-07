@@ -1568,7 +1568,7 @@
 		}
 
 	body, input, select, textarea {
-		color: #6b3a3a;
+		color: #374151;
 		/*font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;*/
 		font-family: Optima,Segoe,"Segoe UI",Candara,Calibri,Arial,sans-serif;
 		font-size: 30pt;
@@ -1582,18 +1582,18 @@
 		-ms-transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 		transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 		/*border-bottom: dotted 1px;*/
-		color: #49bf9d;
+		color: #6366f1;
 		text-decoration: none;
 	}
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: #49bf9d !important;
+			color: #6366f1 !important;
 			text-decoration: none;
 		}
 
 	strong, b {
-		color: #010101;
+		color: #0f172a;
 		font-weight: 500;
 
 	}
@@ -1607,7 +1607,7 @@
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #454545;
+		color: #1e293b;
 		font-weight: 400;
 		line-height: 1em;
 		margin: 1em 0 0 0;
@@ -1796,7 +1796,7 @@
 		input[type="email"]:focus,
 		select:focus,
 		textarea:focus {
-			border-color: #49bf9d;
+			border-color: #6366f1;
 		}
 
 	.select-wrapper {
@@ -1906,7 +1906,7 @@
 
 		input[type="checkbox"]:focus + label:before,
 		input[type="radio"]:focus + label:before {
-			border-color: #49bf9d;
+			border-color: #6366f1;
 		}
 
 	input[type="checkbox"] + label:before {
@@ -2370,17 +2370,17 @@
 		input[type="reset"]:hover,
 		input[type="button"]:hover,
 		.button:hover {
-			border-color: #49bf9d;
-			color: #49bf9d !important;
+			border-color: #6366f1;
+			color: #6366f1 !important;
 		}
 
 		input[type="submit"]:active,
 		input[type="reset"]:active,
 		input[type="button"]:active,
 		.button:active {
-			background-color: rgba(73, 191, 157, 0.1);
-			border-color: #49bf9d;
-			color: #49bf9d !important;
+			background-color: rgba(99, 102, 241, 0.1);
+			border-color: #6366f1;
+			color: #6366f1 !important;
 		}
 
 		input[type="submit"].icon,
@@ -2425,8 +2425,8 @@
 		input[type="reset"].special,
 		input[type="button"].special,
 		.button.special {
-			background-color: #49bf9d;
-			border-color: #49bf9d;
+			background-color: #6366f1;
+			border-color: #6366f1;
 			color: #ffffff !important;
 		}
 
@@ -2434,16 +2434,16 @@
 			input[type="reset"].special:hover,
 			input[type="button"].special:hover,
 			.button.special:hover {
-				background-color: #5cc6a7;
-				border-color: #5cc6a7;
+				background-color: #818cf8;
+				border-color: #818cf8;
 			}
 
 			input[type="submit"].special:active,
 			input[type="reset"].special:active,
 			input[type="button"].special:active,
 			.button.special:active {
-				background-color: #3eb08f;
-				border-color: #3eb08f;
+				background-color: #4f46e5;
+				border-color: #4f46e5;
 			}
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
@@ -2499,7 +2499,7 @@
 		-webkit-justify-content: space-between;
 		-ms-justify-content: space-between;
 		justify-content: space-between;
-		background-color: #1f1815;
+		background-color: #0f172a;
 		color: rgba(255, 255, 255, 0.5);
 		height: 100%;
 		left: 0;
@@ -2564,6 +2564,7 @@
 		    height: 100%;
 		    object-fit: cover;
 		    z-index: -2;
+		    filter: grayscale(50%);
 		}
 
 		#denoised-img {
@@ -2992,7 +2993,7 @@
 
 			#footer {
 				background-attachment: scroll;
-				background-color: #1f1815;
+				background-color: #0f172a;
 				background-image: url("images/overlay.png"), url("../../images/bg.jpg");
 				background-position: top left,						bottom center;
 				background-repeat: repeat,							no-repeat;
@@ -3167,4 +3168,160 @@
 				padding-left: 0;
 			}
 
+	}
+
+/* Think block */
+
+	.think-block {
+		border-left: 3px solid #c7d2fe;
+		background: #f5f3ff;
+		border-radius: 0 0.5em 0.5em 0;
+		padding: 0.75em 1.25em;
+		margin-top: 0;
+	}
+
+	.think-block > summary {
+		cursor: pointer;
+		list-style: none;
+		user-select: none;
+		outline: none;
+	}
+
+	.think-block > summary::-webkit-details-marker,
+	.think-block > summary::marker {
+		display: none;
+	}
+
+	.think-tag {
+		font-family: "Courier New", monospace;
+		font-size: 0.85em;
+		color: #818cf8;
+		font-weight: 400;
+	}
+
+	.think-block .think-content {
+		padding-top: 0.4em;
+	}
+
+/* Agent step rows */
+
+	.agent-step {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 1px 0;
+		font-size: 0.82em;
+		font-family: "Courier New", monospace;
+		line-height: 1.9em;
+		opacity: 0;
+		animation: step-appear 0.15s ease forwards;
+	}
+
+	@keyframes step-appear {
+		from { opacity: 0; transform: translateX(-4px); }
+		to   { opacity: 1; transform: translateX(0); }
+	}
+
+	.step-icon {
+		color: #818cf8;
+		width: 1.2em;
+		flex-shrink: 0;
+		text-align: center;
+	}
+
+	.step-icon.done { color: #6366f1; }
+
+	.step-text {
+		color: #4b5563;
+		transition: opacity 0.3s ease;
+	}
+
+	.step-text.final-text {
+		color: #6366f1;
+		font-weight: 500;
+		opacity: 1 !important;
+	}
+
+/* Research interests */
+
+	#research-interests {
+		display: none;
+		opacity: 0;
+		transform: translateY(8px);
+		transition: opacity 0.5s ease, transform 0.5s ease;
+	}
+
+	#research-interests.visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.interest-era-past p        { color: #9ca3af; }
+	.interest-era-past p strong { color: #9ca3af; }
+
+	.era-label {
+		display: inline-block;
+		font-family: "Courier New", monospace;
+		font-size: 0.62em;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		border-radius: 0.3em;
+		padding: 0.1em 0.5em;
+		font-weight: 400;
+	}
+
+	.era-current {
+		color: #6366f1;
+		border: 1px solid #c7d2fe;
+		background: #f5f3ff;
+	}
+
+	.era-past {
+		color: #9ca3af;
+		border: 1px solid #e5e7eb;
+	}
+
+/* Think block — collapsed "thought for Xs" state */
+
+	.think-block.done-thinking {
+		background: transparent;
+		border-left-color: #e5e7eb;
+		padding: 0.2em 0.8em;
+		transition: background 0.4s ease, border-color 0.4s ease, padding 0.4s ease;
+	}
+
+	.think-block.done-thinking > summary {
+		font-size: 0.82em;
+		color: #9ca3af;
+		font-style: italic;
+		font-family: inherit;
+	}
+
+	.think-block.done-thinking > summary::after {
+		content: ' ›';
+		font-style: normal;
+		color: #c4b5fd;
+	}
+
+	.think-block.done-thinking[open] > summary::after {
+		content: ' ‹';
+	}
+
+/* Publication sub-rows */
+
+	.agent-pub {
+		padding-left: 1.7em;
+		line-height: 1.7em;
+	}
+
+	.pub-bullet {
+		color: #c4b5fd;
+		flex-shrink: 0;
+		margin-right: 0.3em;
+	}
+
+	.pub-text {
+		color: #6b7280;
+		font-style: italic;
+		font-size: 0.95em;
 	}

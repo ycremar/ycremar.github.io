@@ -29,9 +29,9 @@
 		<div class="inner">
 			<a href="#" class="image avatar"><img src="images/avatar.png" alt="" /></a>
 			<h1>
-				<strong style="background-color: rgba(64,0,64,.6)">Yaochen (Ethan) Xie</strong><br /> 
+				<strong style="background-color: rgba(60,60,60,.35)">Yaochen (Ethan) Xie</strong><br /> 
 			</h1>
-			<h1><i style="background-color: rgba(64,0,64,.6)">
+			<h1><i style="background-color: rgba(60,60,60,.35)">
 				Senior Applied Scientist<br />
 				Amazon Search<br />
 			</i></h1>
@@ -50,7 +50,7 @@
 			<header style="margin-bottom: 10px;" class="major">
 				<h2>Howdy!</h2>
 			</header>
-			<p>I'm a Senior Applied Scientist at Amazon Search, where I lead the development of scalable and cost-efficient LLM-powered search &amp; recommendation systems. I received my Ph.D. in Computer Science from Texas A&amp;M University advised by <a href="https://people.tamu.edu/~sji/">Prof. Shuiwang Ji</a>, and my B.S. in Statistics from the <a href="https://en.wikipedia.org/wiki/Special_Class_for_the_Gifted_Young">School of the Gifted Young</a> at the University of Science and Technology of China. My research spans LLM systems, alignment, and machine learning foundations for scientific discovery (AI4Science). I serve as Area Chair at Language and Molecules @ ACL and Scaling Environments for Agents @ NeurIPS, and on the program committees of multiple top-tier conferences.
+			<p id="bio-text">I'm a Senior Applied Scientist at Amazon Search, where I lead the development of scalable and cost-efficient LLM-powered search &amp; recommendation systems. I received my Ph.D. in Computer Science from Texas A&amp;M University, and my B.S. in Statistics from the <a href="https://en.wikipedia.org/wiki/Special_Class_for_the_Gifted_Young">School of the Gifted Young</a> at the University of Science and Technology of China. My research spans efficient LLM systems, reward modeling, and machine learning foundations. I serve as Area Chair at Language and Molecules @ ACL and Scaling Environments for Agents @ NeurIPS, and on the program committees of multiple top-tier conferences.
 			<br> <br> 
 			<p><a href="https://scholar.google.com/citations?user=Xw3ZjnMAAAAJ" class="fa fa-graduation-cap" target="_blank"> Google Scholar</a>&ensp;&ensp;<a href="https://www.linkedin.com/in/yaochen-xie-44602994/" class="fa fa-linkedin" target="_blank"> LinkedIn</a>&ensp;&ensp;<a href="https://github.com/ycremar" class="fa fa-github"> Github</a>
 			<!-- &ensp;&ensp;<a href="Curriculum_vitae.pdf" class="fa fa-file-text-o" target="_blank"> Curriculum Vitae</a> -->
@@ -60,17 +60,22 @@
 
 		<!-- Education -->
 		<section id="edu">
-			<h2 style="margin-bottom: 10px;">Research Interests</h2>
-			<section>
-				<h4 style="margin-bottom: 4px; margin-top: 14px;">LLMs &amp; Alignment</h4>
-				<p style="margin: 0;">Post-Training &nbsp;&middot;&nbsp; Reward Modeling &nbsp;&middot;&nbsp; Evolving Agents</p>
-				<h4 style="margin-bottom: 4px; margin-top: 14px;">Search &amp; Recommendation</h4>
-				<p style="margin: 0;">LLM-based Recommender Systems &nbsp;&middot;&nbsp; Retrieval-Augmented Generation &nbsp;&middot;&nbsp; Multi-Modality</p>
-				<h4 style="margin-bottom: 4px; margin-top: 14px;">Foundation Models</h4>
-				<p style="margin: 0;">Self-Supervised Learning &nbsp;&middot;&nbsp; Graph Neural Networks</p>
-				<h4 style="margin-bottom: 4px; margin-top: 14px;">AI4Science</h4>
-				<p style="margin: 0;">Geometric Deep Learning &nbsp;&middot;&nbsp; Bioinformatics &nbsp;&middot;&nbsp; Biomedical Imaging &nbsp;&middot;&nbsp; Model Explainability</p>
-			</section>
+			<h2 style="margin-bottom: 12px;">Research Interests</h2>
+			<details class="think-block" id="think-research" open>
+					<summary><span class="think-tag">&lt;think&gt;</span></summary>
+					<div class="think-content" id="think-steps"></div>
+				</details>
+			<div id="research-interests">
+
+				<div class="interest-era">
+					<!-- <span class="era-label era-current">current</span> -->
+					<p style="margin: 6px 0 0 0;"><strong>LLMs &amp; Alignment</strong>: Post-Training, Reward Modeling, Evolving Agents</p>
+					<p style="margin: 6px 0 0 0;"><strong>Search &amp; Recommendation</strong>: LLM-based Recommender Systems, Retrieval-Augmented Generation, Multi-Modality</p>
+					<p style="margin: 6px 0 0 0;"><strong>Foundation Models</strong>: Self-Supervised Learning, Graph Neural Networks, Model Explainability</p>
+					<p style="margin: 6px 0 0 0;"><strong>AI4Science</strong>: Geometric Deep Learning, Bioinformatics, Biomedical Imaging</p>
+				</div>
+
+			</div>
 		</section >
 
 		<!-- Publication -->
@@ -80,22 +85,21 @@
 			* Equally contributed.
 			<section>
 
+<div class="paper" style="margin-top: 25px;">
+			  <p class="title">
+			  	<a href="https://arxiv.org/abs/2603.05910" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
+			  	<b>The World Won't Stay Still: Programmable Evolution for Agent Benchmarks.</b></p>
+			  <p style="margin-top: 3px;">Guangrui Li, <strong>Yaochen Xie</strong>, Yi Liu, Ziwei Dong, Xingyuan Pan, Tianqi Zheng, Jason Choi, Michael J. Morais, Binit Jha, Shaunak Mishra, Bingrou Zhou, Chen Luo, Monica Xiao Cheng, Dawn Song</p>
+			  <p><i>Preprint, 2026</i>
+			  </p>
+			</div>
+
 			<div class="paper" style="margin-top: 25px;">
 			  <p class="title">
 			  	<a href="https://openreview.net/pdf?id=9UgUMFW67X" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
 			  	<b>Genetic InfoMax: Exploring Mutual Information Maximization in High-Dimensional Imaging Genetics Studies.</b></p>
 			  <p style="margin-top: 3px;"><strong>Yaochen Xie</strong>, Yuchao Lin, Ziqian Xie, Sheikh Muhammad Saiful Islam, Degui Zhi, Shuiwang Ji</p>
 			  <p><i> Transactions on Machine Learning Research (<strong>TMLR</strong>), 2024</i>
-			  </p>
-			</div>
-
-			<div class="paper" style="margin-top: 25px;">
-			  <p class="title">
-			  	<a href="https://openreview.net/forum?id=LSYhE2hLWG" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
-			  	<a href="https://github.com/divelab/AIRS" class="fa fa-github" target="_blank"></a>&ensp;
-			  	<b>SineNet: Learning Temporal Dynamics in Time-Dependent Partial Differential Equations.</b></p>
-			  <p style="margin-top: 3px;">Xuan Zhang, Jacob Helwig, Yuchao Lin, <strong>Yaochen Xie</strong>, Cong Fu, Stephan Wojtowytsch, Shuiwang Ji</p>
-			  <p><i>International Conference on Learning Representations (<strong>ICLR</strong>), 2024</i>
 			  </p>
 			</div>
 
@@ -131,15 +135,6 @@
 			</div>
 
 
-			<div class="paper" style="margin-top: 25px;">
-			  <p class="title">
-			  	<a href="https://arxiv.org/abs/2107.09787" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
-			  	<b>Group Contrastive Self-Supervised Learning on Graphs.</b>
-			  </p>
-			  <p style="margin-top: 3px;">Xinyi Xu, Cheng Deng, <strong>Yaochen Xie</strong>, Shuiwang Ji</p>
-			  <p><i>IEEE Transactions on Pattern Analysis and Machine Intelligence (<strong>TPAMI</strong>), 2022.
-			  </i></p>
-			</div>
 
 
 			<div class="paper" style="margin-top: 25px;">
@@ -149,54 +144,6 @@
 			  </p>
 			  <p style="margin-top: 3px;"><strong>Yaochen Xie</strong>, Zhao Xu, Jingtun Zhang, Zhengyang Wang, and Shuiwang Ji</p>
 			  <p><i>IEEE Transactions on Pattern Analysis and Machine Intelligence (<strong>TPAMI</strong>), 2022.
-			  </i></p>
-			</div>
-
-
-			<div class="paper" style="margin-top: 25px;">
-			  <p class="title">
-			  	<a href="https://ieeexplore.ieee.org/document/9785968/" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
-			  	<a href="https://github.com/divelab/AEANets" class="fa fa-github"></a>&ensp;
-			  	<b>Augmented Equivariant Attention Networks for Microscopy Image Transformation.</b>
-			  </p>
-			  <p style="margin-top: 3px;"><strong>Yaochen Xie</strong>, Yu Ding, Shuiwang Ji</p>
-			  <p><i>IEEE Transactions on Medical Imaging (<strong>TMI</strong>), 2022.
-			  </i></p>
-			</div>
-
-
-			<div class="paper" style="margin-top: 25px;">
-			  <p class="title">
-			  	<a href="https://academic.oup.com/bioinformatics/article/38/9/2579/6531963" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
-			  	<a href="https://github.com/divelab/MoleculeX" class="fa fa-github" target="_blank"></a>&ensp;
-			  	<b>Advanced graph and sequence neural networks for molecular property prediction <br> and drug discovery.</b>
-			  </p>
-			  <p style="margin-top: 3px;">Zhengyang Wang*, Meng Liu*, Youzhi Luo*, Zhao Xu*, <strong>Yaochen Xie*</strong>, Limei Wang*, Lei Cai*, Qi Qi, Zhuoning Yuan, Tianbao Yang, Shuiwang Ji.</p>
-			  <p><i><strong>Bioinformatics</strong>,  38(9): 2579-2586, 2022. 
-			  </i></p>
-			</div>
-
-			
-			<div class="paper" style="margin-top: 25px;">
-			  <p class="title">
-			  	<a href="https://arxiv.org/abs/2102.10757" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
-			  	<a href="https://github.com/divelab/DIG/" class="fa fa-github" target="_blank"></a>&ensp;
-			  	<b>DIG: A Turnkey Library for Diving into Graph Deep Learning Research.</b>
-			  </p>
-			  <p style="margin-top: 3px;">Meng Liu*, Youzhi Luo*, Limei Wang*, <strong>Yaochen Xie*</strong>, Hao Yuan*, Shurui Gui*, Haiyang Yu*, Zhao Xu, Jingtun Zhang, Yi Liu, Keqiang Yan, Haoran Liu, Cong Fu, Bora Oztekin, Xuan Zhang, Shuiwang Ji.</p>
-			  <p><i>Journal of Machine Learning Research (<strong>JMLR</strong>), 22 (240): 1-9, 2021. 
-			  </i></p>
-			</div>
-
-
-			<div class="paper" style="margin-top: 25px;">
-			  <p class="title">
-			  	<a href="https://www.nature.com/articles/s42256-020-00283-x" class="fa fa-file-pdf-o" target="_blank"></a>&ensp;
-			  	<a href="https://github.com/divelab/GVTNets/" class="fa fa-github" target="_blank"></a>&ensp;
-			  	<a href="https://www.youtube.com/watch?v=ZkGvbbBB3Sg" class="fa fa-youtube" target="_blank"></a>&ensp;
-			  	<b>Global Voxel Transformer Networks for Augmented Microscopy.</b></p>
-			  <p style="margin-top: 3px;">Zhengyang Wang*, <strong>Yaochen Xie*</strong>, and Shuiwang Ji.</p>
-			  <p><i><strong>Nature Machine Intelligence</strong>, 3: 161-171, 2021.
 			  </i></p>
 			</div>
 
@@ -276,8 +223,8 @@
 		<!-- Footer -->
 			<footer id="footer">
 				<div class="inner">
-					<strong style="background-color: rgba(64,0,64,.6)">Scroll down to denoise &#8595;</strong><br /> 
-					<ul class="copyright"><i style="background-color: rgba(64,0,64,.6)">
+					<strong style="background-color: rgba(60,60,60,.35)">Scroll down to denoise &#8595;</strong><br /> 
+					<ul class="copyright"><i style="background-color: rgba(60,60,60,.35)">
 						Source of Background Image<br /> 
 						Noisy data: <a href="https://www.nature.com/articles/s41592-018-0216-7" target="_blank">[Weigert et al. 2018]</a><br />
 						Denoised: <a href="https://arxiv.org/abs/2010.11971" target="_blank">[Ours 2020]</a>, <a href="https://www.nature.com/articles/s42256-020-00283-x" target="_blank">[Ours 2021]</a><br /><i>
@@ -293,6 +240,7 @@
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/theme.js"></script>
 
 	</body>
 </html>
