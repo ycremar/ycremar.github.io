@@ -1,0 +1,19 @@
+Redesign homepage: editorial style with ambient neural background
+
+Replace the HTML5 UP "Read Only" template with a clean, typographic
+"editorial minimal" design (Newsreader + Inter, teal accent, light/dark
+toggle respecting system preference).
+
+Highlights:
+- Research Interests regrouped into three themed clusters with an LLM
+  "thinking -> generating" streaming motif.
+- Full-page neural network background confined to the side gutters that
+  grows with scroll (top->bottom), doubling as a progress indicator;
+  nodes appear only once connected. Starts partly grown.
+- Gentle scroll reveals and refined link/publication micro-interactions.
+- Add publication: "The World Won't Stay Still: Programmable Evolution
+  for Agent Benchmarks" (arXiv 2603.05910).
+- Preserve Google Analytics + site-verification meta.
+
+Keep old site as index_legacy.html and the three design explorations
+under redesign/ (editorial, mono, lab).
