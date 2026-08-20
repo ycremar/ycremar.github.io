@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yaochen (Ethan) Xie — Refined Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafafb; --surface:#ffffff; --ink:#17171c; --muted:#6b6b78;
+    --line:#ececed; --accent:#6366f1; --accent-2:#0ea5a4; --card:#ffffff; --shadow:0 1px 2px #0000000a,0 8px 24px #0000000a;
+  }
+  html[data-theme="dark"]{
+    --bg:#0c0c10; --surface:#141419; --ink:#e9e9ef; --muted:#9b9baa;
+    --line:#232330; --accent:#818cf8; --accent-2:#2dd4bf; --card:#141419; --shadow:0 1px 2px #0000003a,0 8px 24px #00000040;
+  }
+  @media (prefers-color-scheme: dark){
+    html:not([data-theme="light"]){
+      --bg:#0c0c10; --surface:#141419; --ink:#e9e9ef; --muted:#9b9baa;
+      --line:#232330; --accent:#818cf8; --accent-2:#2dd4bf; --card:#141419; --shadow:0 1px 2px #0000003a,0 8px 24px #00000040;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter",-apple-system,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline; text-underline-offset:3px}
+  .wrap{max-width:860px; margin:0 auto; padding:0 24px}
+  h1,h2,h3{font-family:"Space Grotesk",sans-serif}
+
+  .toggle{position:fixed; top:20px; right:20px; z-index:20; width:40px; height:40px; border-radius:12px;
+    background:var(--surface); border:1px solid var(--line); color:var(--muted); cursor:pointer; font-size:15px; box-shadow:var(--shadow); transition:.15s}
+  .toggle:hover{color:var(--ink); transform:translateY(-1px)}
+
+  /* HERO with noise -> denoise motif */
+  .hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
+  .hero-bg{position:absolute; inset:0; z-index:0}
+  .hero-bg .noise{position:absolute; inset:0; opacity:.9;
+    -webkit-mask-image:radial-gradient(120% 90% at 80% 10%,#000 0%,transparent 62%);
+    mask-image:radial-gradient(120% 90% at 80% 10%,#000 0%,transparent 62%)}
+  .hero-bg .glow{position:absolute; inset:0;
+    background:radial-gradient(60% 70% at 78% 8%,var(--accent) 0%,transparent 55%); opacity:.14}
+  .hero-inner{position:relative; z-index:1; padding:120px 24px 64px; max-width:860px; margin:0 auto}
+  .badge{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:500; color:var(--muted);
+    background:var(--surface); border:1px solid var(--line); padding:6px 12px; border-radius:999px; margin-bottom:22px}
+  .badge .dot{width:7px; height:7px; border-radius:50%; background:var(--accent-2); box-shadow:0 0 0 3px var(--accent-2)22}
+  h1.name{font-size:clamp(36px,6vw,56px); font-weight:700; letter-spacing:-.02em; line-height:1.04; margin:0 0 12px}
+  .role{font-size:clamp(17px,2.4vw,20px); color:var(--muted); margin:0 0 22px; font-weight:500}
+  .role b{color:var(--ink); font-weight:600}
+  .lede{font-size:17px; max-width:58ch; margin:0 0 26px}
+  .links{display:flex; flex-wrap:wrap; gap:10px}
+  .links a{display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:500; color:var(--ink);
+    background:var(--surface); border:1px solid var(--line); padding:9px 15px; border-radius:10px; box-shadow:var(--shadow); transition:.15s}
+  .links a:hover{border-color:var(--accent); transform:translateY(-1px); text-decoration:none}
+
+  section{max-width:860px; margin:0 auto; padding:52px 24px}
+  .eyebrow{font-size:12.5px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin:0 0 8px}
+  h2{font-size:26px; font-weight:600; letter-spacing:-.01em; margin:0 0 22px}
+
+  .interests{display:flex; flex-wrap:wrap; gap:10px}
+  .interests span{font-size:14px; font-weight:500; background:var(--surface); border:1px solid var(--line); color:var(--ink); padding:9px 14px; border-radius:10px}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .cardpub{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:var(--shadow); transition:.18s; display:flex; flex-direction:column}
+  .cardpub:hover{transform:translateY(-2px); border-color:var(--accent)}
+  .cardpub .tag{align-self:flex-start; font-size:11.5px; font-weight:600; letter-spacing:.03em; color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 12%,transparent); padding:4px 9px; border-radius:6px; margin-bottom:12px}
+  .cardpub .t{font-weight:600; font-size:15.5px; line-height:1.35; margin-bottom:8px}
+  .cardpub .a{color:var(--muted); font-size:13px; line-height:1.5; flex:1}
+  .cardpub .foot{display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid var(--line)}
+  .cardpub .yr{font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums}
+  .cardpub .refs{display:flex; gap:12px; font-size:12.5px; font-weight:500}
+
+  .svc-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px}
+  @media(max-width:640px){.svc-grid{grid-template-columns:1fr}}
+  .svc h3{font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 12px; font-weight:600}
+  .svc .row{display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid var(--line); font-size:14.5px}
+  .svc .row:last-child{border-bottom:none}
+  .svc .row .yr{color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
+
+  .misc{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px 24px; box-shadow:var(--shadow)}
+  .misc p{margin:0 0 10px}
+  .misc p:last-child{margin:0}
+  footer{text-align:center; padding:40px 24px 64px; color:var(--muted); font-size:13px}
+  .star{color:var(--muted); font-size:13.5px; margin:-8px 0 22px}
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+
+<svg width="0" height="0" style="position:absolute">
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/></filter>
+</svg>
+
+<header class="hero">
+  <div class="hero-bg">
+    <div class="noise" style="filter:contrast(120%) brightness(100%)"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#grain)" opacity="0.35"/></svg></div>
+    <div class="glow"></div>
+  </div>
+  <div class="hero-inner">
+    <span class="badge"><span class="dot"></span>Senior Applied Scientist · Amazon Search</span>
+    <h1 class="name">Yaochen (Ethan) Xie</h1>
+    <p class="role">Reliable ML — from <b>denoising</b> &amp; <b>self-supervised learning</b> to <b>LLM post-training</b> &amp; <b>reward modeling</b>.</p>
+    <p class="lede">I work on improving the applicability and reliability of machine learning to drive broad industrial applications and scientific discovery (AI4Science).</p>
+    <nav class="links">
+      <a href="https://scholar.google.com/citations?user=Xw3ZjnMAAAAJ" target="_blank">Google Scholar</a>
+      <a href="https://github.com/ycremar" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/yaochen-xie-44602994/" target="_blank">LinkedIn</a>
+    </nav>
+  </div>
+</header>
+
+<section>
+  <p class="eyebrow">About</p>
+  <h2>Background</h2>
+  <p>I received my Ph.D. in Computer Science from Texas A&amp;M University, advised by <a href="https://people.tamu.edu/~sji/" target="_blank">Prof. Shuiwang Ji</a>. Before that, I obtained my B.S. in Statistics from the <a href="https://en.wikipedia.org/wiki/Special_Class_for_the_Gifted_Young" target="_blank">School of the Gifted Young</a> at the University of Science and Technology of China. I currently serve as an Area Chair for Language and Molecule @ ACL and Scaling Environments for Agents @ NeurIPS, and on the program committees of several conferences.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Focus</p>
+  <h2>Research Interests</h2>
+  <div class="interests">
+    <span>LLM Post-Training</span><span>Reward Modeling</span><span>Retrieval-Augmented Generation</span>
+    <span>Multi-Modality</span><span>Self-Supervised Learning</span><span>Foundation Models</span>
+    <span>Recommender Systems</span><span>Model Explainability</span><span>Graph Neural Networks</span>
+    <span>AI4Science</span><span>Geometric Deep Learning</span><span>Biomedical Imaging</span>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Publications</p>
+  <h2>Selected Work</h2>
+  <p class="star">* Equal contribution.</p>
+  <div class="grid">
+
+    <div class="cardpub"><span class="tag">TMLR 2024</span>
+      <div class="t">Genetic InfoMax: Mutual Information Maximization in High-Dimensional Imaging Genetics Studies</div>
+      <div class="a"><strong>Yaochen Xie</strong>, Yuchao Lin, Ziqian Xie, S. M. S. Islam, Degui Zhi, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2024</span><span class="refs"><a href="https://openreview.net/pdf?id=9UgUMFW67X" target="_blank">PDF</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">ICLR 2024</span>
+      <div class="t">SineNet: Learning Temporal Dynamics in Time-Dependent Partial Differential Equations</div>
+      <div class="a">Xuan Zhang, Jacob Helwig, Yuchao Lin, <strong>Yaochen Xie</strong>, Cong Fu, S. Wojtowytsch, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2024</span><span class="refs"><a href="https://openreview.net/forum?id=LSYhE2hLWG" target="_blank">PDF</a><a href="https://github.com/divelab/AIRS" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">Preprint 2023</span>
+      <div class="t">Artificial Intelligence for Science in Quantum, Atomistic, and Continuum Systems</div>
+      <div class="a">Xuan Zhang*, Limei Wang*, Jacob Helwig*, Youzhi Luo*, Cong Fu*, <strong>Yaochen Xie</strong>*, … Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2023</span><span class="refs"><a href="https://arxiv.org/abs/2307.08423" target="_blank">PDF</a><a href="https://github.com/divelab/AIRS" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">NeurIPS 2022</span>
+      <div class="t">Task-Agnostic Graph Explanations</div>
+      <div class="a"><strong>Yaochen Xie</strong>, Sumeet Katariya, Xianfeng Tang, Edward Huang, Nikhil Rao, Karthik Subbian, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2022</span><span class="refs"><a href="https://arxiv.org/abs/2202.08335" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/tree/main/dig/xgraph/TAGE" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">ICML 2022</span>
+      <div class="t">Self-Supervised Representation Learning via Latent Graph Prediction</div>
+      <div class="a"><strong>Yaochen Xie</strong>*, Zhao Xu*, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2022</span><span class="refs"><a href="https://proceedings.mlr.press/v162/xie22e.html" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/tree/dig/examples/sslgraph/LaGraph" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">IEEE TPAMI 2022</span>
+      <div class="t">Self-Supervised Learning of Graph Neural Networks: A Unified Review</div>
+      <div class="a"><strong>Yaochen Xie</strong>, Zhao Xu, Jingtun Zhang, Zhengyang Wang, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2022</span><span class="refs"><a href="https://ieeexplore.ieee.org/document/9764632" target="_blank">PDF</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">IEEE TMI 2022</span>
+      <div class="t">Augmented Equivariant Attention Networks for Microscopy Image Transformation</div>
+      <div class="a"><strong>Yaochen Xie</strong>, Yu Ding, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2022</span><span class="refs"><a href="https://ieeexplore.ieee.org/document/9785968/" target="_blank">PDF</a><a href="https://github.com/divelab/AEANets" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">Bioinformatics 2022</span>
+      <div class="t">Advanced Graph and Sequence Neural Networks for Molecular Property Prediction and Drug Discovery</div>
+      <div class="a">Zhengyang Wang*, Meng Liu*, Youzhi Luo*, Zhao Xu*, <strong>Yaochen Xie</strong>*, Limei Wang*, … Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2022</span><span class="refs"><a href="https://academic.oup.com/bioinformatics/article/38/9/2579/6531963" target="_blank">PDF</a><a href="https://github.com/divelab/MoleculeX" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">JMLR 2021</span>
+      <div class="t">DIG: A Turnkey Library for Diving into Graph Deep Learning Research</div>
+      <div class="a">Meng Liu*, Youzhi Luo*, Limei Wang*, <strong>Yaochen Xie</strong>*, Hao Yuan*, … Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2021</span><span class="refs"><a href="https://arxiv.org/abs/2102.10757" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">Nature Machine Intelligence 2021</span>
+      <div class="t">Global Voxel Transformer Networks for Augmented Microscopy</div>
+      <div class="a">Zhengyang Wang*, <strong>Yaochen Xie</strong>*, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2021</span><span class="refs"><a href="https://www.nature.com/articles/s42256-020-00283-x" target="_blank">PDF</a><a href="https://github.com/divelab/GVTNets/" target="_blank">Code</a><a href="https://www.youtube.com/watch?v=ZkGvbbBB3Sg" target="_blank">Video</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">NeurIPS 2020</span>
+      <div class="t">Noise2Same: Optimizing a Self-Supervised Bound for Image Denoising</div>
+      <div class="a"><strong>Yaochen Xie</strong>, Zhengyang Wang, Shuiwang Ji</div>
+      <div class="foot"><span class="yr">2020</span><span class="refs"><a href="https://arxiv.org/abs/2010.11971" target="_blank">PDF</a><a href="https://github.com/divelab/Noise2Same" target="_blank">Code</a></span></div>
+    </div>
+
+    <div class="cardpub"><span class="tag">IEEE/ACM ToN 2019</span>
+      <div class="t">Finding the Stars in the Fireworks: Deep Understanding of Motion Sensor Fingerprint</div>
+      <div class="a">Xiang-Yang Li, Huiqi Liu, Lan Zhang, Zhenan Wu, <strong>Yaochen Xie</strong>, Ge Chen, Chunxiao Wan, Zhongwei Liang</div>
+      <div class="foot"><span class="yr">2019</span><span class="refs"><a href="https://ieeexplore.ieee.org/document/8809830" target="_blank">PDF</a></span></div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Community</p>
+  <h2>Services</h2>
+  <div class="svc-grid">
+    <div class="svc">
+      <h3>Area Chair</h3>
+      <div class="row"><span>Language and Molecules @ ACL</span><span class="yr">2024</span></div>
+      <div class="row"><span>Scaling Environments for Agents @ NeurIPS</span><span class="yr">2025</span></div>
+      <h3 style="margin-top:22px">Journal Reviewer</h3>
+      <div class="row"><span>IEEE TPAMI · TIP · TNNLS</span><span></span></div>
+      <div class="row"><span>TMLR · Nature Communications · DAMI</span><span></span></div>
+    </div>
+    <div class="svc">
+      <h3>Program Committee</h3>
+      <div class="row"><span>NeurIPS</span><span class="yr">2021–2023</span></div>
+      <div class="row"><span>ICML</span><span class="yr">2022–2024</span></div>
+      <div class="row"><span>KDD</span><span class="yr">2021–2022</span></div>
+      <div class="row"><span>ICLR</span><span class="yr">2022–2023</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Off the clock</p>
+  <h2>Miscellaneous</h2>
+  <div class="misc">
+    <p>Meet our family member <a href="https://www.instagram.com/sesameofraincity/" target="_blank">Sesame</a>, a bernedoodle born on 7/10/2023. Pup training overfits easily.</p>
+    <p>I love performance driving and am interested in auto engineering &amp; tuning. My favorite drive is <a href="https://www.raincitysupercars.com/singleday/2020/4/27/the-local" target="_blank">the Local 2.0</a>, WA.</p>
+  </div>
+</section>
+
+<footer>© Yaochen (Ethan) Xie</footer>
+
+<script>
+  const root=document.documentElement, btn=document.getElementById('themeToggle');
+  const saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);
+  btn.addEventListener('click',()=>{
+    const dark = root.getAttribute('data-theme')==='dark'
+      || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme:dark)').matches);
+    const next = dark ? 'light':'dark';
+    root.setAttribute('data-theme',next); localStorage.setItem('theme',next);
+  });
+
+  // noise -> denoise: grain fades as you scroll into the page
+  const noise=document.querySelector('.hero-bg .noise');
+  addEventListener('scroll',()=>{
+    const p=Math.min(1, scrollY/420);
+    noise.style.opacity = (0.9*(1-p)).toFixed(3);
+  },{passive:true});
+</script>
+</body>
+</html>
