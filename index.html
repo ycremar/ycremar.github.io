@@ -13,13 +13,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="google-site-verification" content="YoSFv-xUytsvz-aYqBNagl5sX8WKte4whKdDIoA2PjU" />
 <title>Yaochen (Ethan) Xie</title>
+<meta name="description" content="Yaochen (Ethan) Xie — Senior Applied Scientist at Amazon Search, working on agentic AI: LLM post-training, reward modeling, agent harnesses, and evolving environments." />
+<meta property="og:title" content="Yaochen (Ethan) Xie" />
+<meta property="og:description" content="Agentic AI research — post-training, reward modeling, agent harnesses, and evolving environments." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ycremar.github.io/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%230f766e' stroke-opacity='.35' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%230f766e'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#fbfaf7; --surface:#ffffff; --ink:#1b1a17; --muted:#6a675e;
     --line:#e7e3d9; --accent:#0f766e; --accent-soft:#0f766e1a;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
     --maxw:720px;
   }
   html[data-theme="dark"]{
@@ -42,8 +49,12 @@
   a:hover{border-bottom-color:var(--accent)}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px; position:relative; z-index:1}
 
-  /* full-page neural background — grows with scroll (doubles as progress) */
-  .neural-bg{position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none}
+  /* environment: an agent walking a graph that keeps changing */
+  .env-bg{position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none}
+  .hud{position:fixed; left:20px; bottom:18px; z-index:2; pointer-events:none;
+    font:11px/1.5 var(--mono); color:var(--muted); opacity:.75; letter-spacing:.02em}
+  .hud .on{color:var(--accent)}
+  @media (max-width:1000px){ .hud{display:none} }
 
   /* theme toggle */
   .toggle{position:fixed; top:20px; right:20px; z-index:10;
@@ -60,11 +71,45 @@
     line-height:1.05; letter-spacing:-.01em; margin:0 0 10px}
   .role{font-family:"Newsreader",Georgia,serif; font-style:italic; font-size:clamp(18px,2.6vw,22px);
     color:var(--muted); margin:0 0 26px}
-  .lede{font-size:18px; max-width:60ch; color:var(--ink); margin:0 0 24px}
-  .links{display:flex; flex-wrap:wrap; gap:22px; font-size:14.5px}
+  .links{display:flex; flex-wrap:wrap; align-items:center; gap:22px; font-size:14.5px}
   .links a{border-bottom:none; color:var(--muted)}
   .links a:hover{color:var(--accent)}
   .links a::after{content:"↗"; font-size:11px; margin-left:4px; opacity:.5}
+
+  /* agent trace — the page "introduces itself" as a tool-call log */
+  .trace{font-family:var(--mono); font-size:12.5px; line-height:1.8; color:var(--muted);
+    margin:0 0 24px; padding:10px 0 10px 14px; border-left:1px solid var(--line)}
+  .trace .ln{display:flex; gap:12px; opacity:0; transform:translateX(-4px); transition:opacity .25s, transform .25s}
+  .trace .ln.on{opacity:1; transform:none}
+  .trace .k{flex:0 0 4ch; color:var(--accent)}
+  .trace .c{color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .trace .r{margin-left:auto; padding-left:12px; white-space:nowrap}
+  .trace .r.ok{color:var(--accent)}
+  @media (max-width:560px){ .trace .r{display:none} }
+
+  /* ask: client-side retrieval over this page */
+  .ask{display:inline-flex; align-items:center; gap:10px; min-width:240px; cursor:text;
+    font:13px var(--mono); color:var(--muted); background:var(--surface);
+    border:1px solid var(--line); border-radius:8px; padding:6px 8px 6px 12px; transition:border-color .15s}
+  .ask:hover{border-color:var(--accent)}
+  .ask .p{color:var(--accent)}
+  kbd{margin-left:auto; font:11px var(--mono); color:var(--muted); border:1px solid var(--line); border-radius:4px; padding:1px 6px}
+
+  .palette{position:fixed; inset:0; z-index:30; display:none; align-items:flex-start; justify-content:center;
+    padding-top:14vh; background:color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter:blur(3px)}
+  .palette.open{display:flex}
+  .palette .box{width:min(620px,92vw); background:var(--surface); border:1px solid var(--line);
+    border-radius:12px; box-shadow:0 24px 60px -24px rgba(0,0,0,.3); overflow:hidden}
+  .palette .in{display:flex; align-items:center; gap:10px; padding:0 16px; border-bottom:1px solid var(--line)}
+  .palette .in .p{font:15px var(--mono); color:var(--accent)}
+  .palette input{flex:1; border:0; outline:0; background:transparent; color:var(--ink); font:15px var(--mono); padding:16px 0}
+  .palette .out{font:12.5px/1.8 var(--mono); color:var(--muted); padding:12px 16px 14px; max-height:52vh; overflow:auto}
+  .palette .sugg{color:var(--accent); cursor:pointer}
+  .palette .sugg:hover{text-decoration:underline}
+  .palette a.hit{display:block; border:0; margin:3px -8px; padding:6px 8px; border-radius:6px;
+    font:500 14px/1.4 "Inter",sans-serif; color:var(--ink)}
+  .palette a.hit .meta{display:block; font:11.5px/1.6 var(--mono); color:var(--muted); font-weight:400}
+  .palette a.hit.sel, .palette a.hit:hover{background:var(--accent-soft)}
 
   /* section */
   section{padding:34px 0; border-top:1px solid var(--line)}
@@ -86,6 +131,8 @@
   .pub .refs{margin-top:6px; display:flex; gap:14px; font-size:12.5px}
   .pub .refs a{color:var(--muted); border-bottom:none}
   .pub .refs a:hover{color:var(--accent)}
+  .pub.flash{animation:flash 1.8s ease}
+  @keyframes flash{0%,30%{background:var(--accent-soft)}100%{background:transparent}}
 
   .svc{display:grid; grid-template-columns:180px 1fr; gap:6px 20px; font-size:15px; margin-bottom:22px}
   .svc .h{color:var(--muted); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; padding-top:2px}
@@ -97,29 +144,14 @@
   footer{padding:40px 0 70px; color:var(--muted); font-size:13px; border-top:1px solid var(--line)}
   .star{color:var(--muted); font-size:13px}
 
-  /* Research Interests — LLM "thinking → generating" motif */
-  #interests .thinking{display:none; align-items:center; gap:7px; height:20px;
-    margin:0 0 12px 0; color:var(--muted); font-size:13.5px; letter-spacing:.02em}
-  #ri-list li{padding:0 0 16px 0; display:block}
+  /* Research Interests — rendered as an agent's plan */
+  #ri-list li{padding:0 0 16px 0; display:grid; grid-template-columns:36px 1fr}
   #ri-list li:last-child{padding-bottom:0}
   #ri-list li::before{display:none}
-  #ri-list li .grp{display:block; font-family:"Inter",-apple-system,sans-serif; font-weight:600;
+  #ri-list li .idx{grid-row:span 2; font:12px var(--mono); color:var(--accent); padding-top:3px}
+  #ri-list li .grp{font-family:"Inter",-apple-system,sans-serif; font-weight:600;
     font-size:16px; letter-spacing:-.01em; color:var(--ink); margin-bottom:3px}
   #ri-list li .txt{color:var(--muted); font-size:15px; line-height:1.5}
-  #interests .thinking .dot{width:6px; height:6px; border-radius:50%; background:var(--muted); opacity:.3; animation:think 1.3s ease-in-out infinite}
-  #interests .thinking .dot:nth-child(2){animation-delay:.18s}
-  #interests .thinking .dot:nth-child(3){animation-delay:.36s}
-  #interests .thinking .think-label{font-style:italic; opacity:.75}
-  @keyframes think{0%,70%,100%{opacity:.28}35%{opacity:.95}}
-
-  #ri-list.armed li{opacity:0}
-  #ri-list.armed li::before{opacity:0}
-  #ri-list.armed li.gen, #ri-list.armed li.done{opacity:1}
-  #ri-list.armed li.gen::before, #ri-list.armed li.done::before{opacity:.7}
-  #ri-list .caret{display:inline-block; width:2px; height:1.05em; margin-left:2px;
-    background:var(--accent); vertical-align:-2px; animation:blink 1s steps(1) infinite}
-  @keyframes blink{50%{opacity:0}}
-  @media (prefers-reduced-motion: reduce){ #ri-list .caret{display:none} }
 
   /* gentle scroll reveals */
   .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
@@ -141,159 +173,123 @@
 </style>
 </head>
 <body>
-<canvas class="neural-bg" id="neural" aria-hidden="true"></canvas>
+<canvas class="env-bg" id="env" aria-hidden="true"></canvas>
+<div class="hud" id="hud" aria-hidden="true"></div>
 <button class="toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
 
 <div class="wrap">
 
   <header class="hero">
     <div class="hero-content">
-      <p class="eyebrow">Machine Learning Research</p>
+      <p class="eyebrow">Agentic AI Research</p>
       <h1 class="name">Yaochen<br>(Ethan) Xie</h1>
       <p class="role">Senior Applied Scientist @ Amazon Search</p>
-      <p class="lede">I work on making machine learning reliable and broadly useful — from image denoising and self-supervised learning to LLM post-training, reward modeling, and recommender systems.</p>
+      <div class="trace" id="trace" aria-hidden="true">
+        <div class="ln"><span class="k">goal</span><span class="c">introduce("Yaochen Xie")</span><span class="r"></span></div>
+        <div class="ln"><span class="k">call</span><span class="c">scholar.search(author)</span><span class="r" data-r="33 papers · 2.8k citations"></span></div>
+        <div class="ln"><span class="k">env</span><span class="c">world.step()</span><span class="r" data-r="changed · re-plan"></span></div>
+        <div class="ln"><span class="k">done</span><span class="c">render(page)</span><span class="r ok" data-r="ok"></span></div>
+      </div>
       <nav class="links">
-        <a href="https://scholar.google.com/citations?user=Xw3ZjnMAAAAJ" target="_blank">Google Scholar</a>
-        <a href="https://github.com/ycremar" target="_blank">GitHub</a>
-        <a href="https://www.linkedin.com/in/yaochen-xie-44602994/" target="_blank">LinkedIn</a>
+        <a href="https://scholar.google.com/citations?user=Xw3ZjnMAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="https://github.com/ycremar" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/yaochen-xie-44602994/" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="ask" id="askBtn" type="button" aria-label="Search this page"><span class="p">›</span>ask this page<kbd>/</kbd></button>
       </nav>
     </div>
   </header>
 
   <section>
     <p class="label">About</p>
-    <p>I received my Ph.D. in Computer Science from Texas A&amp;M University. Before that, I obtained my B.S. in Statistics from the <a href="https://en.wikipedia.org/wiki/Special_Class_for_the_Gifted_Young" target="_blank">School of the Gifted Young</a> at the University of Science and Technology of China. My research aims to improve the applicability and reliability of machine learning to drive industrial applications and scientific discovery (AI4Science). I currently serve as an Area Chair for Language and Molecule @ ACL and Scaling Environments for Agents @ NeurIPS, and on the program committees of several conferences.</p>
+    <p>I build LLMs for search and recommendation systems at scale with low latency. My research also focuses on agentic AI: building and evaluating LLM agents through post-training, reward modeling, and agent harness design, and building benchmarks whose environments keep evolving. My recent work asks how agents hold up when the world changes, and whether they can faithfully simulate real multi-turn human behavior.</p>
+    <p>During my Ph.D., I worked on self-supervised learning, graph neural networks, and model explainability, with applications in AI4Science and scalable system in industry. Self-supervised learning has a model build its own training signal from raw data, so it scales with data rather than annotation, and that recipe underlies today's foundation models.</p>
+    <p>I hold a Ph.D. in Computer Science from Texas A&amp;M University and a B.S. in Statistics from the <a href="https://en.wikipedia.org/wiki/Special_Class_for_the_Gifted_Young" target="_blank" rel="noopener">School of the Gifted Young</a> at the University of Science and Technology of China. I have served as an Area Chair for Language and Molecules @ ACL and Scaling Environments for Agents @ NeurIPS, and on the program committees of several conferences.</p>
   </section>
 
   <section id="interests">
     <p class="label">Research Interests</p>
-    <div class="thinking" id="thinking" aria-hidden="true">
-      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      <span class="think-label">thinking</span>
-    </div>
     <ul class="plain" id="ri-list">
-      <li data-grp="Language Models &amp; Agentic AI" data-text="Post-Training · Reward Modeling · Harness · Evolving Agent & Environment">
-        <span class="grp">Language Models &amp; Agentic AI</span><span class="txt">Post-Training · Reward Modeling · Harness · Evolving Agent & Environment</span>
+      <li>
+        <span class="idx">01</span><span class="grp">Agentic AI</span><span class="txt">Agent Harness Design · Self-Evolving Agents &amp; Environments · Agent Benchmarks</span>
       </li>
-      <li data-grp="Representation &amp; Foundation Models" data-text="Self-Supervised Learning · Graph Neural Networks · Model Explainability · Multi-Modality">
-        <span class="grp">Representation &amp; Foundation Models</span><span class="txt">Self-Supervised Learning · Graph Neural Networks · Model Explainability · Multi-Modality</span>
+      <li>
+        <span class="idx">02</span><span class="grp">LLM Post-Training</span><span class="txt">Post-Training · Reward Modeling</span>
       </li>
-      <li data-grp="Applications" data-text="Recommender Systems &amp; Search (Model Compression, RAG) · AI4Science (Geometric Deep Learning, Bioinformatics, Biomedical Imaging)">
-        <span class="grp">Applications</span><span class="txt">Recommender Systems &amp; Search (Model Compression, RAG) · AI4Science (Geometric Deep Learning, Bioinformatics, Biomedical Imaging)</span>
+      <li>
+        <span class="idx">03</span><span class="grp">Foundations &amp; Applications</span><span class="txt">Self-Supervised Learning · Graph Neural Networks · Explainability · Recommender Systems &amp; Search · AI4Science</span>
       </li>
     </ul>
   </section>
 
-  <section>
+  <section id="pubs">
     <p class="label">Selected Publications</p>
     <p class="star">* Equal contribution.</p>
 
-    <div class="pub">
+    <div class="pub" data-tags="agents agentic benchmark environment evolution llm evaluation">
       <div class="t">The World Won't Stay Still: Programmable Evolution for Agent Benchmarks</div>
       <div class="a">Guangrui Li, <strong>Yaochen Xie</strong>, Yi Liu, Ziwei Dong, Xingyuan Pan, Tianqi Zheng, Jason Choi, Michael J. Morais, Binit Jha, Shaunak Mishra, Bingrou Zhou, Chen Luo, Monica Xiao Cheng, Dawn Song</div>
-      <div class="v"><span class="venue">Preprint</span> · <span class="year">2025</span></div>
-      <div class="refs"><a href="https://arxiv.org/abs/2603.05910" target="_blank">PDF</a></div>
+      <div class="v"><span class="venue">Preprint</span> · <span class="year">2026</span></div>
+      <div class="refs"><a href="https://arxiv.org/abs/2603.05910" target="_blank" rel="noopener">PDF</a></div>
     </div>
 
-    <div class="pub">
-      <div class="t">Genetic InfoMax: Exploring Mutual Information Maximization in High-Dimensional Imaging Genetics Studies</div>
-      <div class="a"><strong>Yaochen Xie</strong>, Yuchao Lin, Ziqian Xie, Sheikh Muhammad Saiful Islam, Degui Zhi, Shuiwang Ji</div>
-      <div class="v"><span class="venue">Transactions on Machine Learning Research (TMLR)</span> · <span class="year">2024</span></div>
-      <div class="refs"><a href="https://openreview.net/pdf?id=9UgUMFW67X" target="_blank">PDF</a></div>
+    <div class="pub" data-tags="acl agents agentic llm simulation human behavior user shopping web evaluation">
+      <div class="t">Can LLM Agents Simulate Multi-Turn Human Behavior? Evidence from Real Online Customer Behavior Data</div>
+      <div class="a">Yuxuan Lu, Jing Huang, Yan Han, Bingsheng Yao, Sisong Bei, Jiri Gesi, <strong>Yaochen Xie</strong>, Yisi Sang, Zheshen Wang, Qi He, Dakuo Wang</div>
+      <div class="v"><span class="venue">Annual Meeting of the Association for Computational Linguistics (ACL)</span> · <span class="year">2026</span></div>
+      <div class="refs"><a href="https://arxiv.org/abs/2503.20749" target="_blank" rel="noopener">PDF</a></div>
     </div>
 
-    <div class="pub">
-      <div class="t">SineNet: Learning Temporal Dynamics in Time-Dependent Partial Differential Equations</div>
-      <div class="a">Xuan Zhang, Jacob Helwig, Yuchao Lin, <strong>Yaochen Xie</strong>, Cong Fu, Stephan Wojtowytsch, Shuiwang Ji</div>
-      <div class="v"><span class="venue">International Conference on Learning Representations (ICLR)</span> · <span class="year">2024</span></div>
-      <div class="refs"><a href="https://openreview.net/forum?id=LSYhE2hLWG" target="_blank">PDF</a><a href="https://github.com/divelab/AIRS" target="_blank">Code</a></div>
-    </div>
-
-    <div class="pub">
+    <div class="pub" data-tags="ai4science survey quantum molecule physics">
       <div class="t">Artificial Intelligence for Science in Quantum, Atomistic, and Continuum Systems</div>
       <div class="a">Xuan Zhang*, Limei Wang*, Jacob Helwig*, Youzhi Luo*, Cong Fu*, <strong>Yaochen Xie</strong>*, … Shuiwang Ji</div>
-      <div class="v"><span class="venue">Preprint</span> · <span class="year">2023</span></div>
-      <div class="refs"><a href="https://arxiv.org/abs/2307.08423" target="_blank">PDF</a><a href="https://github.com/divelab/AIRS" target="_blank">Code</a></div>
+      <div class="v"><span class="venue">Foundations and Trends in Machine Learning</span> · <span class="year">2025</span></div>
+      <div class="refs"><a href="https://arxiv.org/abs/2307.08423" target="_blank" rel="noopener">PDF</a><a href="https://github.com/divelab/AIRS" target="_blank" rel="noopener">Code</a></div>
     </div>
 
-    <div class="pub">
+    <div class="pub" data-tags="graph gnn explainability explanation">
       <div class="t">Task-Agnostic Graph Explanations</div>
       <div class="a"><strong>Yaochen Xie</strong>, Sumeet Katariya, Xianfeng Tang, Edward Huang, Nikhil Rao, Karthik Subbian, Shuiwang Ji</div>
       <div class="v"><span class="venue">Neural Information Processing Systems (NeurIPS)</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://arxiv.org/abs/2202.08335" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/tree/main/dig/xgraph/TAGE" target="_blank">Code</a></div>
+      <div class="refs"><a href="https://arxiv.org/abs/2202.08335" target="_blank" rel="noopener">PDF</a><a href="https://github.com/divelab/DIG/tree/main/dig/xgraph/TAGE" target="_blank" rel="noopener">Code</a></div>
     </div>
 
-    <div class="pub">
+    <div class="pub" data-tags="graph gnn self-supervised ssl representation">
       <div class="t">Self-Supervised Representation Learning via Latent Graph Prediction</div>
       <div class="a"><strong>Yaochen Xie</strong>*, Zhao Xu*, Shuiwang Ji</div>
       <div class="v"><span class="venue">International Conference on Machine Learning (ICML)</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://proceedings.mlr.press/v162/xie22e.html" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/tree/dig/examples/sslgraph/LaGraph" target="_blank">Code</a></div>
+      <div class="refs"><a href="https://proceedings.mlr.press/v162/xie22e.html" target="_blank" rel="noopener">PDF</a><a href="https://github.com/divelab/DIG/tree/dig/examples/sslgraph/LaGraph" target="_blank" rel="noopener">Code</a></div>
     </div>
 
-    <div class="pub">
-      <div class="t">Group Contrastive Self-Supervised Learning on Graphs</div>
-      <div class="a">Xinyi Xu, Cheng Deng, <strong>Yaochen Xie</strong>, Shuiwang Ji</div>
-      <div class="v"><span class="venue">IEEE TPAMI</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://arxiv.org/abs/2107.09787" target="_blank">PDF</a></div>
-    </div>
-
-    <div class="pub">
+    <div class="pub" data-tags="graph gnn self-supervised ssl survey review">
       <div class="t">Self-Supervised Learning of Graph Neural Networks: A Unified Review</div>
       <div class="a"><strong>Yaochen Xie</strong>, Zhao Xu, Jingtun Zhang, Zhengyang Wang, Shuiwang Ji</div>
       <div class="v"><span class="venue">IEEE TPAMI</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://ieeexplore.ieee.org/document/9764632" target="_blank">PDF</a></div>
+      <div class="refs"><a href="https://ieeexplore.ieee.org/document/9764632" target="_blank" rel="noopener">PDF</a></div>
     </div>
 
-    <div class="pub">
-      <div class="t">Augmented Equivariant Attention Networks for Microscopy Image Transformation</div>
-      <div class="a"><strong>Yaochen Xie</strong>, Yu Ding, Shuiwang Ji</div>
-      <div class="v"><span class="venue">IEEE Transactions on Medical Imaging (TMI)</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://ieeexplore.ieee.org/document/9785968/" target="_blank">PDF</a><a href="https://github.com/divelab/AEANets" target="_blank">Code</a></div>
-    </div>
-
-    <div class="pub">
-      <div class="t">Advanced Graph and Sequence Neural Networks for Molecular Property Prediction and Drug Discovery</div>
-      <div class="a">Zhengyang Wang*, Meng Liu*, Youzhi Luo*, Zhao Xu*, <strong>Yaochen Xie</strong>*, Limei Wang*, Lei Cai*, Qi Qi, Zhuoning Yuan, Tianbao Yang, Shuiwang Ji</div>
-      <div class="v"><span class="venue">Bioinformatics</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://academic.oup.com/bioinformatics/article/38/9/2579/6531963" target="_blank">PDF</a><a href="https://github.com/divelab/MoleculeX" target="_blank">Code</a></div>
-    </div>
-
-    <div class="pub">
+    <div class="pub" data-tags="graph gnn library software">
       <div class="t">DIG: A Turnkey Library for Diving into Graph Deep Learning Research</div>
       <div class="a">Meng Liu*, Youzhi Luo*, Limei Wang*, <strong>Yaochen Xie</strong>*, Hao Yuan*, Shurui Gui*, Haiyang Yu*, … Shuiwang Ji</div>
       <div class="v"><span class="venue">Journal of Machine Learning Research (JMLR)</span> · <span class="year">2021</span></div>
-      <div class="refs"><a href="https://arxiv.org/abs/2102.10757" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/" target="_blank">Code</a></div>
+      <div class="refs"><a href="https://arxiv.org/abs/2102.10757" target="_blank" rel="noopener">PDF</a><a href="https://github.com/divelab/DIG/" target="_blank" rel="noopener">Code</a></div>
     </div>
 
-    <div class="pub">
-      <div class="t">Global Voxel Transformer Networks for Augmented Microscopy</div>
-      <div class="a">Zhengyang Wang*, <strong>Yaochen Xie</strong>*, Shuiwang Ji</div>
-      <div class="v"><span class="venue">Nature Machine Intelligence</span> · <span class="year">2021</span></div>
-      <div class="refs"><a href="https://www.nature.com/articles/s42256-020-00283-x" target="_blank">PDF</a><a href="https://github.com/divelab/GVTNets/" target="_blank">Code</a><a href="https://www.youtube.com/watch?v=ZkGvbbBB3Sg" target="_blank">Video</a></div>
-    </div>
-
-    <div class="pub">
+    <div class="pub" data-tags="denoising image self-supervised ssl">
       <div class="t">Noise2Same: Optimizing a Self-Supervised Bound for Image Denoising</div>
       <div class="a"><strong>Yaochen Xie</strong>, Zhengyang Wang, Shuiwang Ji</div>
       <div class="v"><span class="venue">Neural Information Processing Systems (NeurIPS)</span> · <span class="year">2020</span></div>
-      <div class="refs"><a href="https://arxiv.org/abs/2010.11971" target="_blank">PDF</a><a href="https://github.com/divelab/Noise2Same" target="_blank">Code</a></div>
+      <div class="refs"><a href="https://arxiv.org/abs/2010.11971" target="_blank" rel="noopener">PDF</a><a href="https://github.com/divelab/Noise2Same" target="_blank" rel="noopener">Code</a></div>
     </div>
 
-    <div class="pub">
-      <div class="t">Finding the Stars in the Fireworks: Deep Understanding of Motion Sensor Fingerprint</div>
-      <div class="a">Xiang-Yang Li, Huiqi Liu, Lan Zhang, Zhenan Wu, <strong>Yaochen Xie</strong>, Ge Chen, Chunxiao Wan, Zhongwei Liang</div>
-      <div class="v"><span class="venue">IEEE/ACM Transactions on Networking</span> · <span class="year">2019</span></div>
-      <div class="refs"><a href="https://ieeexplore.ieee.org/document/8809830" target="_blank">PDF</a></div>
-    </div>
   </section>
 
   <section>
     <p class="label">Tutorial</p>
-    <div class="pub">
+    <div class="pub" data-tags="graph gnn tutorial dig">
       <div class="t">Frontiers of Graph Neural Networks with DIG</div>
       <div class="a">Shuiwang Ji*, Meng Liu*, Yi Liu, Youzhi Luo, Limei Wang*, <strong>Yaochen Xie</strong>*, Zhao Xu*, Haiyang Yu*</div>
       <div class="v"><span class="venue">ACM SIGKDD (KDD)</span> · <span class="year">2022</span></div>
-      <div class="refs"><a href="https://dl.acm.org/doi/abs/10.1145/3534678.3542624" target="_blank">PDF</a><a href="https://github.com/divelab/DIG/tree/dig-stable/tutorials/KDD2022" target="_blank">Code</a></div>
+      <div class="refs"><a href="https://dl.acm.org/doi/abs/10.1145/3534678.3542624" target="_blank" rel="noopener">PDF</a><a href="https://github.com/divelab/DIG/tree/dig-stable/tutorials/KDD2022" target="_blank" rel="noopener">Code</a></div>
     </div>
   </section>
 
@@ -326,14 +322,21 @@
 
   <section class="misc">
     <p class="label">Miscellaneous</p>
-    <p>Meet our family member <a href="https://www.instagram.com/sesameofraincity/" target="_blank">Sesame</a>, a bernedoodle born on 7/10/2023. Pup training overfits easily.</p>
-    <p>I love performance driving and am interested in auto engineering &amp; tuning. My favorite drive is <a href="https://www.raincitysupercars.com/singleday/2020/4/27/the-local" target="_blank">the Local 2.0</a>, WA.</p>
+    <p>Meet our family member <a href="https://www.instagram.com/sesameofraincity/" target="_blank" rel="noopener">Sesame</a>, a bernedoodle born on 7/10/2023. Pup training overfits easily.</p>
+    <p>I love performance driving and am interested in auto engineering &amp; tuning. My favorite drive is <a href="https://www.raincitysupercars.com/singleday/2020/4/27/the-local" target="_blank" rel="noopener">the Local 2.0</a>, WA.</p>
   </section>
 
   <footer>
     © Yaochen (Ethan) Xie
   </footer>
 
+</div>
+
+<div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Search this page">
+  <div class="box">
+    <div class="in"><span class="p">›</span><input id="askInput" type="text" placeholder="ask about papers, topics, code…" autocomplete="off" spellcheck="false"></div>
+    <div class="out" id="askOut"></div>
+  </div>
 </div>
 
 <script>
@@ -346,169 +349,275 @@
     const next = dark ? 'light':'dark';
     root.setAttribute('data-theme',next);
     localStorage.setItem('theme',next);
-    if(window.__latentRefresh) window.__latentRefresh();
+    if(window.__envRefresh) window.__envRefresh();
   });
 
-  // Research Interests — LLM "thinking → generating" motif
+  const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+  // Hero trace — each tool call shows "···" before its result lands
   (function(){
-    const list=document.getElementById('ri-list');
-    const thinking=document.getElementById('thinking');
-    const items=[...list.querySelectorAll('li')];
-    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const wait=ms=>new Promise(r=>setTimeout(r,ms));
-
-    if(reduce){ return; } // leave static full text in place
-
-    // arm: hide text so we can stream it in
-    list.classList.add('armed');
-    items.forEach(li=>{ li.querySelector('.grp').textContent=''; li.querySelector('.txt').textContent=''; });
-    const caret=document.createElement('span'); caret.className='caret';
-
-    async function type(el, full, after){
-      after.after(caret);
-      for(let i=1;i<=full.length;i+=2){      // 2 chars per tick
-        el.textContent=full.slice(0,i);
-        await wait(6);
-      }
-      el.textContent=full;
+    const lines=[...document.querySelectorAll('#trace .ln')];
+    const resultOf=r=>r.dataset.r ? `→ ${r.dataset.r}` : '';
+    if(REDUCE){
+      lines.forEach(l=>{ const r=l.querySelector('.r'); r.textContent=resultOf(r); l.classList.add('on'); });
+      return;
     }
-
-    async function generate(){
-      thinking.style.display='flex';
-      await wait(450);                       // brief "reasoning" pause
-      thinking.style.display='none';
-      for(const li of items){
-        const grp=li.querySelector('.grp');
-        const txt=li.querySelector('.txt');
-        li.classList.add('gen');
-        await type(grp, li.dataset.grp, grp);   // group label first
-        await type(txt, li.dataset.text, txt);  // then its interests
-        li.classList.add('done');
-        await wait(80);                      // beat between groups
+    (async()=>{
+      await wait(250);
+      for(const l of lines){
+        const r=l.querySelector('.r');
+        l.classList.add('on');
+        if(r.dataset.r){ r.textContent='···'; await wait(380); r.textContent=resultOf(r); }
+        await wait(140);
       }
-      caret.remove();
-    }
-
-    let started=false;
-    const io=new IntersectionObserver(es=>{
-      es.forEach(e=>{ if(e.isIntersecting && !started){ started=true; io.disconnect(); generate(); } });
-    },{threshold:.35});
-    io.observe(document.getElementById('interests'));
+    })();
   })();
 
   // Gentle scroll reveals
   (function(){
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(REDUCE) return;
     const secs=[...document.querySelectorAll('.wrap section')];
     secs.forEach(s=>s.classList.add('reveal'));
     const io=new IntersectionObserver(es=>{
       es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
-    },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    },{threshold:0, rootMargin:'0px 0px -20% 0px'});
     secs.forEach(s=>io.observe(s));
   })();
 
-  // Full-page neural network that grows with scroll (doubles as a progress bar)
+  // Ask this page — keyword retrieval over publications, streamed like a tool call
   (function(){
-    const cv=document.getElementById('neural'); if(!cv) return;
+    const pal=document.getElementById('palette'), input=document.getElementById('askInput'), out=document.getElementById('askOut');
+    const STOP=new Set(['the','a','an','of','on','for','in','and','with','to','me','show','about','paper','papers','what','is','his','any','work','by','find']);
+    const SUGGESTIONS=['agents','llm','graph ssl','explainability','denoising','code'];
+    const docs=[...document.querySelectorAll('.pub')].map((el,i)=>{
+      el.id=el.id||`pub-${i}`;
+      const title=el.querySelector('.t').textContent;
+      const venue=el.querySelector('.venue')?.textContent||'';
+      const year=el.querySelector('.year')?.textContent||'';
+      const hasCode=[...el.querySelectorAll('.refs a')].some(a=>a.textContent==='Code');
+      const text=[title, el.querySelector('.a').textContent, venue, year, el.dataset.tags||'', hasCode?'code':''].join(' ').toLowerCase();
+      return {el, title, venue, year, text, titleLc:title.toLowerCase()};
+    });
+    let runId=0, hits=[], sel=0;
+
+    const terms=q=>(q.toLowerCase().match(/[a-z0-9-]+/g)||[]).filter(t=>t.length>1 && !STOP.has(t));
+    function rank(q){
+      const ts=terms(q); if(!ts.length) return [];
+      return docs.map(d=>{
+        let s=0;
+        for(const t of ts){ if(d.titleLc.includes(t)) s+=2; else if(d.text.includes(t)) s+=1; }
+        return {d, s};
+      }).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,6).map(x=>x.d);
+    }
+    const line=html=>{ const div=document.createElement('div'); div.innerHTML=html; out.appendChild(div); return div; };
+    const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+    function showSuggestions(){
+      out.innerHTML='';
+      const div=line('try: ');
+      SUGGESTIONS.forEach((s,i)=>{
+        const a=document.createElement('span'); a.className='sugg'; a.textContent=s;
+        a.addEventListener('click',()=>{ input.value=s; input.focus(); run(); });
+        div.appendChild(a); if(i<SUGGESTIONS.length-1) div.appendChild(document.createTextNode(' · '));
+      });
+    }
+    function markSel(){ out.querySelectorAll('.hit').forEach((h,i)=>h.classList.toggle('sel', i===sel)); }
+
+    async function run(){
+      const id=++runId, q=input.value.trim();
+      if(!q){ hits=[]; showSuggestions(); return; }
+      out.innerHTML='';
+      line(`retrieve("${esc(q)}")`);
+      const status=line('···');
+      hits=rank(q); sel=0;
+      await wait(REDUCE?0:160); if(id!==runId) return;
+      status.textContent=hits.length ? `→ ${hits.length} hit${hits.length>1?'s':''}` : '→ 0 hits · try another query';
+      for(const [i,d] of hits.entries()){
+        await wait(REDUCE?0:55); if(id!==runId) return;
+        const a=document.createElement('a');
+        a.className='hit'; a.href=`#${d.el.id}`;
+        a.innerHTML=`${esc(d.title)}<span class="meta">${esc(d.venue)} · ${esc(d.year)}</span>`;
+        a.addEventListener('click',e=>{ e.preventDefault(); go(d); });
+        a.addEventListener('mouseenter',()=>{ sel=i; markSel(); });
+        out.appendChild(a);
+      }
+      markSel();
+    }
+    function go(d){
+      close();
+      d.el.classList.add('in-view');
+      d.el.scrollIntoView({behavior:REDUCE?'auto':'smooth', block:'center'});
+      d.el.classList.remove('flash'); void d.el.offsetWidth; d.el.classList.add('flash');
+    }
+    function open(){ pal.classList.add('open'); input.value=''; showSuggestions(); input.focus(); }
+    function close(){ pal.classList.remove('open'); }
+
+    let debounce;
+    input.addEventListener('input',()=>{ clearTimeout(debounce); debounce=setTimeout(run,140); });
+    input.addEventListener('keydown',e=>{
+      if(e.key==='ArrowDown'&&hits.length){ e.preventDefault(); sel=(sel+1)%hits.length; markSel(); }
+      else if(e.key==='ArrowUp'&&hits.length){ e.preventDefault(); sel=(sel-1+hits.length)%hits.length; markSel(); }
+      else if(e.key==='Enter'&&hits[sel]){ e.preventDefault(); go(hits[sel]); }
+    });
+    pal.addEventListener('click',e=>{ if(e.target===pal) close(); });
+    document.getElementById('askBtn').addEventListener('click',open);
+    document.addEventListener('keydown',e=>{
+      const typing=/INPUT|TEXTAREA/.test(document.activeElement?.tagName||'');
+      if(e.key==='Escape' && pal.classList.contains('open')) close();
+      else if((e.key==='k' && (e.metaKey||e.ctrlKey)) || (e.key==='/' && !typing)){ e.preventDefault(); open(); }
+    });
+  })();
+
+  // Environment: an agent walks a graph whose edges keep changing ("the world won't stay still").
+  // It explores unvisited states, and pursues the cursor when one is nearby.
+  (function(){
+    const cv=document.getElementById('env'); if(!cv) return;
+    const hud=document.getElementById('hud');
     const ctx=cv.getContext('2d');
-    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const LINK=250, GROW=0.07;   // link radius (px), reveal window per element
-    let w,h,dpr,pts=[],edges=[],col=[120,120,120],prog=0,target=0,raf;
+    const LINK=230, MOVE_MS=650, DWELL_MS=380, TRAIL=16, GOAL_TTL=2500;
+    let w,h,pts=[],muted=[120,120,120],accent=[15,118,110],dim=1;
+    let agent, visited, trail, steps=0, episode=1, lastHop=0, goal=null, goalAt=-1e9;
 
-    function hexToRgb(hex){
-      hex=hex.trim(); if(hex[0]==='#')hex=hex.slice(1);
-      if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');
+    const hexToRgb=hex=>{
+      hex=hex.trim().replace('#','');
+      if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
       const n=parseInt(hex,16); return [(n>>16)&255,(n>>8)&255,n&255];
-    }
+    };
+    const rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
     function refresh(){
-      const c=getComputedStyle(document.documentElement).getPropertyValue('--muted');
-      if(c && c.indexOf('#')>-1) col=hexToRgb(c);
+      const css=getComputedStyle(root);
+      const m=css.getPropertyValue('--muted'), a=css.getPropertyValue('--accent');
+      if(m.includes('#')) muted=hexToRgb(m);
+      if(a.includes('#')) accent=hexToRgb(a);
+      if(REDUCE) draw(performance.now());
     }
-    window.__latentRefresh=refresh;
+    window.__envRefresh=refresh;
 
-    // deterministic pseudo-random so layout/order is stable across frames
+    // deterministic pseudo-random so the initial world is stable across loads
     const rnd=i=>{ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+    const dist=(a,b)=>Math.hypot(a.x-b.x, a.y-b.y);
 
     function build(){
-      dpr=Math.min(window.devicePixelRatio||1,2);
+      const dpr=Math.min(window.devicePixelRatio||1,2);
       w=window.innerWidth; h=window.innerHeight;
       cv.width=w*dpr; cv.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-      const N=Math.min(90, Math.max(32, Math.round(w*h/21000)));
-      // keep neurons in the side gutters, clear of the centered text column
+      const N=Math.min(80, Math.max(30, Math.round(w*h/23000)));
+      // keep the environment in the side gutters, clear of the centered text column
       const cx=w/2, bandHalf=Math.min(400, w*0.44);
       const leftW=Math.max(0, cx-bandHalf), rightW=Math.max(0, w-(cx+bandHalf));
-      const fullWidth=(leftW<24 && rightW<24);   // no room for gutters → fall back
+      const fullWidth=(leftW<24 && rightW<24);
+      dim=fullWidth ? 0.45 : 1;
+      hud.style.visibility=fullWidth ? 'hidden' : 'visible';
       pts=[];
       for(let i=0;i<N;i++){
         let xmin,xmax;
         if(fullWidth){ xmin=0; xmax=w; }
         else if(rnd(i+3) < leftW/(leftW+rightW)){ xmin=0; xmax=cx-bandHalf; }
         else { xmin=cx+bandHalf; xmax=w; }
-        pts.push({
-          x:xmin+rnd(i)*(xmax-xmin), y:rnd(i+91)*h,
-          vx:(rnd(i+7)-.5)*0.07, vy:(rnd(i+53)-.5)*0.07,
-          rad:1.8+rnd(i*5+2)*2.6, xmin, xmax     // bigger, varied circles
-        });
+        pts.push({ x:xmin+rnd(i)*(xmax-xmin), y:rnd(i+91)*h,
+          vx:(rnd(i+7)-.5)*0.12, vy:(rnd(i+53)-.5)*0.12, rad:1.6+rnd(i*5+2)*2.2, xmin, xmax });
       }
-      edges=[];
-      for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
-        if(Math.hypot(pts[i].x-pts[j].x, pts[i].y-pts[j].y) < LINK){
-          const midY=(pts[i].y+pts[j].y)/2;
-          edges.push({a:i, b:j, r:0.02+(midY/h)*0.82});  // connect top→bottom with scroll
-        }
-      }
-    }
-    const START=0.2;   // network is already this "grown" at the top of the page
-    function progress(){
-      const st=window.scrollY||document.documentElement.scrollTop||0;
-      const max=(document.documentElement.scrollHeight-window.innerHeight)||1;
-      const p=Math.min(1, Math.max(0, st/max));
-      return START + (1-START)*p;
-    }
-    function draw(move){
-      if(move) for(const p of pts){
-        p.x+=p.vx; p.y+=p.vy;
-        if(p.x<p.xmin||p.x>p.xmax)p.vx*=-1;   // stay inside the gutter
-        if(p.y<0||p.y>h)p.vy*=-1;
-      }
-      ctx.clearRect(0,0,w,h);
-      const active=new Array(pts.length).fill(0);    // max link-growth touching each node
-      // links grow in as scroll passes their threshold — the network fills top→bottom
-      for(const e of edges){
-        const g=(prog-e.r)/GROW; if(g<=0) continue;
-        const a=pts[e.a], b=pts[e.b];
-        const d=Math.hypot(a.x-b.x, a.y-b.y); if(d>=LINK) continue;
-        const f=Math.min(1,g);                       // 0→1 growth fraction (line extends)
-        if(f>active[e.a]) active[e.a]=f;
-        if(f>active[e.b]) active[e.b]=f;
-        const alpha=(1-d/LINK)*0.15;
-        ctx.strokeStyle=`rgba(${col[0]},${col[1]},${col[2]},${alpha})`;
-        ctx.lineWidth=1; ctx.beginPath();
-        ctx.moveTo(a.x,a.y); ctx.lineTo(a.x+(b.x-a.x)*f, a.y+(b.y-a.y)*f); ctx.stroke();
-      }
-      // nodes: appear only once connected, easing in with their first link
-      for(let k=0;k<pts.length;k++){
-        const fade=active[k]; if(fade<=0) continue;
-        const p=pts[k];
-        ctx.fillStyle=`rgba(${col[0]},${col[1]},${col[2]},${0.2*fade})`;
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.rad*(0.6+0.4*fade),0,7); ctx.fill();
-      }
-    }
-    function loop(){
-      target=progress();
-      prog+=(target-prog)*0.09;                       // ease toward scroll position
-      draw(true);
-      raf=requestAnimationFrame(loop);
+      const start=Math.floor(rnd(N)*N);
+      agent={from:start, to:start, t:1};
+      visited=new Set([start]); trail=[]; lastHop=performance.now();
+      updateHud();
     }
 
-    window.addEventListener('resize',()=>{ build(); if(reduce){ prog=progress(); draw(false); } });
-    build(); refresh();
-    if(reduce){
-      window.addEventListener('scroll',()=>{ prog=progress(); draw(false); }, {passive:true});
-      prog=progress(); draw(false);
-    } else {
-      loop();
+    function neighbors(i){
+      const out=[];
+      for(let j=0;j<pts.length;j++) if(j!==i && dist(pts[i],pts[j])<LINK) out.push(j);
+      return out;
     }
+    function nearest(i){
+      let best=-1, bd=Infinity;
+      for(let j=0;j<pts.length;j++){ if(j===i) continue; const d=dist(pts[i],pts[j]); if(d<bd){ bd=d; best=j; } }
+      return best;
+    }
+    const pursuing=now=>goal && now-goalAt<GOAL_TTL;
+
+    function pickNext(now){
+      const cur=agent.to, nb=neighbors(cur);
+      if(!nb.length) return nearest(cur);
+      if(pursuing(now)){
+        const best=nb.reduce((a,b)=>dist(pts[a],goal)<dist(pts[b],goal)?a:b);
+        return dist(pts[best],goal)<dist(pts[cur],goal) ? best : cur;
+      }
+      const fresh=nb.filter(j=>!visited.has(j));
+      const pool=fresh.length ? fresh : nb;
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+    function hop(now){
+      const next=pickNext(now);
+      lastHop=now;
+      if(next===agent.to || next<0) return;
+      trail.push([agent.to,next]); if(trail.length>TRAIL) trail.shift();
+      agent={from:agent.to, to:next, t:0};
+      visited.add(next); steps++;
+      if(visited.size>=pts.length){ visited=new Set([next]); episode++; }
+      updateHud(now);
+    }
+    function updateHud(now=performance.now()){
+      const mode=pursuing(now) ? '<span class="on">pursuing cursor</span>' : 'exploring';
+      hud.innerHTML=`ep ${episode} · step ${steps} · explored ${visited.size}/${pts.length} · ${mode}`;
+    }
+
+    function draw(now){
+      ctx.clearRect(0,0,w,h);
+      // environment: proximity edges, recomputed every frame as states drift
+      ctx.lineWidth=1;
+      for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+        const d=dist(pts[i],pts[j]); if(d>=LINK) continue;
+        ctx.strokeStyle=rgba(muted,(1-d/LINK)*0.13*dim);
+        ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke();
+      }
+      for(let k=0;k<pts.length;k++){
+        const p=pts[k], seen=visited.has(k);
+        ctx.fillStyle=seen ? rgba(accent,0.32*dim) : rgba(muted,0.2*dim);
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.rad,0,7); ctx.fill();
+      }
+      // trajectory: recent hops fade with age
+      ctx.lineWidth=1.3;
+      trail.forEach(([a,b],i)=>{
+        const age=(i+1)/trail.length;
+        ctx.strokeStyle=rgba(accent,(0.06+0.5*age)*dim);
+        ctx.beginPath(); ctx.moveTo(pts[a].x,pts[a].y); ctx.lineTo(pts[b].x,pts[b].y); ctx.stroke();
+      });
+      // agent
+      const a=pts[agent.from], b=pts[agent.to];
+      const e=agent.t<.5 ? 2*agent.t*agent.t : 1-Math.pow(-2*agent.t+2,2)/2;
+      const x=a.x+(b.x-a.x)*e, y=a.y+(b.y-a.y)*e;
+      const pulse=REDUCE ? 0 : (Math.sin(now/420)+1)/2;
+      ctx.fillStyle=rgba(accent,(0.10+0.08*pulse)*dim);
+      ctx.beginPath(); ctx.arc(x,y,9+3*pulse,0,7); ctx.fill();
+      ctx.fillStyle=rgba(accent,0.9*dim);
+      ctx.beginPath(); ctx.arc(x,y,3.4,0,7); ctx.fill();
+    }
+
+    function loop(now){
+      for(const p of pts){
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<p.xmin||p.x>p.xmax) p.vx*=-1;
+        if(p.y<0||p.y>h) p.vy*=-1;
+      }
+      const elapsed=now-lastHop;
+      agent.t=Math.min(1, elapsed/MOVE_MS);
+      if(elapsed>MOVE_MS+DWELL_MS) hop(now);
+      draw(now);
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('mousemove',e=>{
+      const wasPursuing=pursuing(performance.now());
+      goal={x:e.clientX, y:e.clientY}; goalAt=performance.now();
+      if(!wasPursuing) updateHud();
+    },{passive:true});
+    setInterval(()=>{ if(goal && !pursuing(performance.now())){ goal=null; updateHud(); } }, 500);
+    window.addEventListener('resize',()=>{ build(); if(REDUCE) draw(performance.now()); });
+
+    build(); refresh();
+    if(REDUCE){ hud.style.display='none'; draw(performance.now()); }
+    else requestAnimationFrame(loop);
   })();
 </script>
 </body>
