@@ -1,0 +1,33 @@
+# Edit the cards here. One card per line: emoji | name | rule
+# Lines starting with # are ignored. Reload the page to see changes.
+
+[CHAOS]
+🚫 | No Volleys | Everyone stays behind the service line. Let it bounce.
+🫲 | Weak Hand Only | Hit every shot with your non-dominant hand.
+🌈 | Lob Only | Every shot must be a lob.
+🐢 | Slow Motion | Only soft shots. No hitting hard.
+🔇 | Silent Game | No talking. Not even the score.
+🪞 | Mirror Partner | You and your partner must hit the same type of shot (both forehand or both backhand).
+🎯 | Cross-Court Only | Every shot goes cross-court.
+🧱 | Forehand Only | Backhands are banned. Run around them.
+🤝 | One Bounce Rule | Ball must bounce twice before you hit it.
+🏃 | Switch Sides | Partners swap sides after every point.
+⚡ | Volley Only | Hit every ball out of the air. No bounces.
+🔄 | Alternate Hits | You and your partner must take turns hitting each shot.
+📏 | Short Court | Only the service boxes are in. Deep shots are out.
+🐸 | Low Only | Every shot must clear the net by less than a racquet length. No high balls.
+📣 | Call Your Shot | Shout "Cross!" or "Line!" before every shot, then hit it there.
+
+[MISSIONS]
+🐱 | The Curious Cat | Get opponents to answer 3 different questions you ask. No repeats.
+🎉 | Fake Celebration | Celebrate a point you lost, 2 times (fist pump or cheer).
+❓ | Trick Question | Get an opponent to say "What?" or "Really?" 2 times.
+🧑‍🏫 | Coach Mode | Give an opponent a tennis tip 2 times, like "Bend your knees!"
+🙄 | Fake Excuse | Blame the sun, wind or racquet for a lost point, 2 times.
+📛 | Name Drop | Say an opponent's first name out loud 3 times during rallies.
+🤕 | Fake Limp | Limp for one whole rally, then play normally.
+⛓️ | Cross-Court Chain | Hit 4 cross-court shots in a row in one rally.
+🎯 | Same Target | Hit 4 shots in a row to the same opponent in one rally.
+⬇️ | Short Landers | Land 3 shots between the net and the service line.
+🌈 | Lob | Hit 3 lobs in the game.
+📐 | Line Pair | Hit 2 down-the-line shots in a row in one rally.

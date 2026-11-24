@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tennis Party Cards</title>
+<style>
+:root{--green:#06492D;--clay:#A95F30;--bg:#f6f1e7;--ink:#1d1d1d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+header{background:var(--green);color:#fff;padding:14px 16px;text-align:center;font-weight:700;font-size:18px}
+nav{display:flex;border-bottom:3px solid var(--clay)}
+nav button{flex:1;padding:14px 4px;font-size:16px;border:0;background:#e8dfcc;color:var(--ink);font-weight:600}
+nav button.on{background:var(--clay);color:#fff}
+main{max-width:480px;margin:0 auto;padding:16px}
+.card{background:#fff;border:2px solid var(--green);border-radius:16px;min-height:200px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;margin:12px 0}
+.card .icon{font-size:48px}
+.card .title{font-size:24px;font-weight:800;margin:8px 0 4px;color:var(--green)}
+.card .desc{font-size:16px;color:#444}
+.card.hidden{background:var(--clay);border-color:var(--clay);color:#fff}
+.card.hidden .title,.card.hidden .desc{color:#fff}
+button.big{width:100%;padding:16px;font-size:18px;font-weight:700;border:0;border-radius:12px;background:var(--green);color:#fff;margin:6px 0}
+button.alt{background:var(--clay)}
+button.ghost{background:#e8dfcc;color:var(--ink)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.small{font-size:13px;color:#666;text-align:center;margin:4px 0}
+.team{background:#fff;border-radius:14px;padding:12px;margin:12px 0;border:2px solid #e8dfcc}
+.team h3{margin:0 0 6px;color:var(--green)}
+.counter{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:17px}
+.counter button{width:44px;height:44px;border-radius:50%;border:0;background:var(--green);color:#fff;font-size:22px}
+.target{font-size:28px;font-weight:800;color:var(--clay)}
+details{margin-top:16px}summary{font-weight:600}
+</style>
+</head>
+<body>
+<header>🎾 Tennis Party Cards</header>
+<nav>
+<button id="t1" class="on" onclick="tab(1)">🎲 Chaos</button>
+<button id="t2" onclick="tab(2)">🕵️ Undercover</button>
+</nav>
+<main>
+<section id="p1">
+<div id="chaos" class="card"><div class="icon">🎲</div><div class="title">Chaos Doubles</div><div class="desc">One rule for everyone on court.</div></div>
+<button class="big" onclick="drawChaos()">Draw Chaos Card</button>
+<div class="small" id="chaosLeft"></div>
+<button class="big ghost" onclick="shuffleChaos()">Reshuffle</button>
+</section>
+
+<section id="p2" style="display:none">
+<div id="teams"></div>
+<div class="small">Draw, peek, then hide. Keep it secret!</div>
+<button class="big ghost" onclick="newRound()">New round (reset)</button>
+<details>
+<summary>Host only: all missions (for checking guesses)</summary>
+<ol id="allMissions"></ol>
+</details>
+</section>
+</main>
+
+<script>
+let CHAOS=[["🚫", "No Volleys", "Everyone stays behind the service line. Let it bounce."], ["🫲", "Weak Hand Only", "Hit every shot with your non-dominant hand."], ["🌈", "Lob Only", "Every shot must be a lob."], ["🐢", "Slow Motion", "Only soft shots. No hitting hard."], ["🔇", "Silent Game", "No talking. Not even the score."], ["🪞", "Mirror Partner", "You and your partner must hit the same type of shot (both forehand or both backhand)."], ["🎯", "Cross-Court Only", "Every shot goes cross-court."], ["🧱", "Forehand Only", "Backhands are banned. Run around them."], ["🤝", "One Bounce Rule", "Ball must bounce twice before you hit it."], ["🏃", "Switch Sides", "Partners swap sides after every point."], ["⚡", "Volley Only", "Hit every ball out of the air. No bounces."], ["🔄", "Alternate Hits", "You and your partner must take turns hitting each shot."], ["📏", "Short Court", "Only the service boxes are in. Deep shots are out."], ["🐸", "Low Only", "Every shot must clear the net by less than a racquet length. No high balls."], ["📣", "Call Your Shot", "Shout \"Cross!\" or \"Line!\" before every shot, then hit it there."]];
+let MISSIONS=[["🐱", "The Curious Cat", "Get opponents to answer 3 different questions you ask. No repeats."], ["🎉", "Fake Celebration", "Celebrate a point you lost, 2 times (fist pump or cheer)."], ["❓", "Trick Question", "Get an opponent to say \"What?\" or \"Really?\" 2 times."], ["🧑‍🏫", "Coach Mode", "Give an opponent a tennis tip 2 times, like \"Bend your knees!\""], ["🙄", "Fake Excuse", "Blame the sun, wind or racquet for a lost point, 2 times."], ["📛", "Name Drop", "Say an opponent's first name out loud 3 times during rallies."], ["🤕", "Fake Limp", "Limp for one whole rally, then play normally."], ["⛓️", "Cross-Court Chain", "Hit 4 cross-court shots in a row in one rally."], ["🎯", "Same Target", "Hit 4 shots in a row to the same opponent in one rally."], ["⬇️", "Short Landers", "Land 3 shots between the net and the service line."], ["🌈", "Lob", "Hit 3 lobs in the game."], ["📐", "Line Pair", "Hit 2 down-the-line shots in a row in one rally."]];
+function parseCards(t){const o={CHAOS:[],MISSIONS:[]};let k=null;for(let l of t.split(/\r?\n/)){l=l.trim();if(!l||l[0]==="#")continue;const m=l.match(/^\[(\w+)\]$/);if(m){k=m[1].toUpperCase();continue}const p=l.split("|").map(s=>s.trim());if(k&&o[k]&&p.length>=3)o[k].push([p[0],p[1],p.slice(2).join(" | ")])}return o}
+const TEAMS=["Team A","Team B"];
+let chaosDeck=[],undState={};
+
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function tab(n){p1.style.display=n==1?"":"none";p2.style.display=n==2?"":"none";t1.className=n==1?"on":"";t2.className=n==2?"on":""}
+
+function shuffleChaos(){chaosDeck=shuf(CHAOS);chaosLeft.textContent=chaosDeck.length+" cards left"}
+function drawChaos(){
+ if(!chaosDeck.length)shuffleChaos();
+ const c=chaosDeck.pop();
+ chaos.innerHTML=`<div class="icon">${c[0]}</div><div class="title">${c[1]}</div><div class="desc">${c[2]}</div>`;
+ chaosLeft.textContent=chaosDeck.length+" cards left";
+ if(navigator.vibrate)navigator.vibrate(40);
+}
+
+function newRound(){
+ const pool=shuf(MISSIONS);
+ undState={};
+ TEAMS.forEach((t,i)=>undState[t]={mission:null,shown:false,bonus:0});
+ undState._pool=pool;
+ renderU();
+}
+function drawM(t){
+ const s=undState[t];
+ if(s.mission)return;
+ s.mission=undState._pool.pop();
+ s.shown=true;
+ renderU();
+}
+function peek(t){undState[t].shown=!undState[t].shown;renderU()}
+function bonus(t,d){
+ const s=undState[t];
+ s.bonus=Math.max(0,Math.min(8,s.bonus+d));
+ renderU();
+}
+function renderU(){
+ teams.innerHTML=TEAMS.map(t=>{
+  const s=undState[t];
+  let card;
+  if(!s.mission) card=`<div class="card"><div class="icon">🕵️</div><div class="desc">No mission yet</div></div><button class="big" onclick="drawM('${t}')">Draw Mission</button>`;
+  else if(s.shown) card=`<div class="card"><div class="icon">${s.mission[0]}</div><div class="title">${s.mission[1]}</div><div class="desc">${s.mission[2]}</div></div><button class="big alt" onclick="peek('${t}')">Hide</button>`;
+  else card=`<div class="card hidden"><div class="icon">🤫</div><div class="title">Secret</div></div><button class="big ghost" onclick="peek('${t}')">Peek</button>`;
+  return `<div class="team"><h3>${t}</h3>${card}
+   <div class="counter"><button onclick="bonus('${t}',-1)">−</button>
+   <div>Bonuses: <b>${s.bonus}</b>/8 &nbsp; Target: <span class="target">${21-s.bonus}</span></div>
+   <button onclick="bonus('${t}',1)">+</button></div></div>`;
+ }).join("");
+}
+function start(){allMissions.innerHTML=MISSIONS.map(m=>`<li>${m[0]} <b>${m[1]}</b>: ${m[2]}</li>`).join("");shuffleChaos();newRound()}
+fetch("cards.txt",{cache:"no-store"}).then(r=>r.ok?r.text():Promise.reject()).then(t=>{const o=parseCards(t);if(o.CHAOS.length)CHAOS=o.CHAOS;if(o.MISSIONS.length)MISSIONS=o.MISSIONS}).catch(()=>{}).then(start);
+</script>
+</body>
+</html>
